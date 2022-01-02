@@ -14,6 +14,6 @@ namespace API.Models
         [Required]
         public User User { get; set; }
 
-        public ICollection<Product> Products { get; set; }
+        public IList<Product> Products { get; set; }
     }
 }

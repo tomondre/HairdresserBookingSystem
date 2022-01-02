@@ -45,7 +45,7 @@ namespace API.Persistence
                 throw new Exception("Company doesnt exist");
             }
 
-            return firstOrDefaultAsync.Products as IList<Product>;
+            return firstOrDefaultAsync.Products;
         }
     }
 }
