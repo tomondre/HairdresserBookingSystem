@@ -1,9 +1,11 @@
-﻿using Shared.Models;
+﻿using System.Threading.Tasks;
+using API.Models;
 
 namespace API.Persistence
 {
     public interface IUserDao
     {
-        User ValidateUserAsync(User user);
+        Task<User> ValidateUserAsync(User user);
+        Task<User> CreateUserAsync(User user);
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using API.Model;
+using API.Models;
 using Microsoft.AspNetCore.Mvc;
-using Shared.Models;
 
 namespace API.Controllers
 {
@@ -17,17 +17,31 @@ namespace API.Controllers
             model = userModel;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<User>> ValidateUserAsync(User user)
+        [HttpPost("login")]
+        public async Task<ActionResult<User>> ValidateUserAsync([FromBody] User user)
         {
             try
             {
-                var validatedUser = model.ValidateUserAsync(user);
+                var validatedUser = await model.ValidateUserAsync(user);
                 return Ok(validatedUser);
             }
             catch (Exception e)
             {
-                return StatusCode(403);
+                return StatusCode(401, e.Message);
+            }
+        }
+
+        [HttpPost("signup")]
+        public async Task<ActionResult<User>> CreateUserAsync([FromBody] User user)
+        {
+            try
+            {
+                var userAsync = await model.CreateUserAsync(user);
+                return Ok(userAsync);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(401, e.Message);
             }
         }
     }

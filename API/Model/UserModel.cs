@@ -1,6 +1,7 @@
 ﻿using System.Runtime.InteropServices.ComTypes;
+using System.Threading.Tasks;
+using API.Models;
 using API.Persistence;
-using Shared.Models;
 
 namespace API.Model
 {
@@ -13,9 +14,14 @@ namespace API.Model
             this.userDao = userDao;
         }
         
-        public User ValidateUserAsync(User user)
+        public async Task<User> ValidateUserAsync(User user)
         {
-            return userDao.ValidateUserAsync(user);
+            return await userDao.ValidateUserAsync(user);
+        }
+
+        public async Task<User> CreateUserAsync(User user)
+        {
+            return await userDao.CreateUserAsync(user);
         }
     }
 }
