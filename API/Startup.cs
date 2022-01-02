@@ -30,6 +30,9 @@ namespace API
         {
             services.AddSingleton<IUserDao, UserDao>();
             services.AddSingleton<IUserModel, UserModel>();
+
+            services.AddSingleton<ICompanyDao, CompanyDao>();
+            services.AddSingleton<ICompanyModel, CompanyModel>();
             
             services.AddControllers();
             services.AddSwaggerGen(c =>
