@@ -8,7 +8,7 @@ using Microsoft.VisualBasic;
 
 namespace API.Persistence
 {
-    public class ProductDao : IProductDao
+    public class ProductDao : PaginationHelper, IProductDao
     {
         public async Task<Product> CreateProductAsync(Product product)
         {

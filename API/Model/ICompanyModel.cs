@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using API.Models;
 
 namespace API.Model
@@ -7,5 +8,7 @@ namespace API.Model
     {
         Task<Company> CreateCompanyAsync(Company company);
         Task<Company> GetCompanyByIdAsync(int id);
+        Task<IList<Company>> GetAllCompaniesAsync();
+        Task<IList<Company>> GetAllPagedCompaniesAsync(int size, int page);
     }
 }

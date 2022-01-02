@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using API.DataAccess;
 using API.Models;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Persistence
 {
-    public class CompanyDao : ICompanyDao
+    public class CompanyDao : PaginationHelper, ICompanyDao
     {
         public async Task<Company> CreateCompanyAsync(Company company)
         {
@@ -33,6 +35,21 @@ namespace API.Persistence
             }
 
             return firstOrDefaultAsync;
+        }
+
+        public async Task<IList<Company>> GetAllCompaniesAsync()
+        {
+            await using HairdresserDbContext context = new HairdresserDbContext();
+            var contextCompanies = await context.Companies.ToListAsync();
+            return contextCompanies;
+        }
+
+        public async Task<IList<Company>> GetAllPagedCompaniesAsync(int size, int page)
+        {
+            await using HairdresserDbContext context = new HairdresserDbContext();
+            var contextCompanies = await context.Companies.ToListAsync();
+            var list = Page(contextCompanies, page, size);
+            return list;
         }
     }
 }

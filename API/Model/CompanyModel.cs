@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using API.Models;
 using API.Persistence;
 
@@ -21,6 +22,16 @@ namespace API.Model
         public Task<Company> GetCompanyByIdAsync(int id)
         {
             return companyDao.GetCompanyByIdAsync(id);
+        }
+
+        public Task<IList<Company>> GetAllCompaniesAsync()
+        {
+            return companyDao.GetAllCompaniesAsync();
+        }
+
+        public Task<IList<Company>> GetAllPagedCompaniesAsync(int size, int page)
+        {
+            return companyDao.GetAllPagedCompaniesAsync(size, page);
         }
     }
 }
