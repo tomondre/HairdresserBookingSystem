@@ -51,11 +51,20 @@ namespace API.Controllers
         }
 
         [HttpGet("/companies/{id:int}/products")]
-        public async Task<ActionResult<IList<Product>>> GetCompanyProductsAsync([FromRoute] int id)
+        public async Task<ActionResult<IList<Product>>> GetCompanyProductsAsync([FromRoute] int id, [FromQuery] int? size, int? page)
         {
             try
             {
-                var companyProductsAsync = await model.GetCompanyProductsAsync(id);
+                IList<Product> companyProductsAsync;
+                if (size.HasValue && page.HasValue)
+                {
+                    companyProductsAsync = await model.GetPagedCompanyProductsAsync(id, size.Value, page.Value);
+                }
+                else
+                {
+                  companyProductsAsync  = await model.GetCompanyProductsAsync(id);
+                    
+                }
                 return Ok(companyProductsAsync);
             }
             catch (Exception e)

@@ -28,5 +28,10 @@ namespace API.Model.Products
         {
             return productDao.GetCompanyProductsAsync(id);
         }
+
+        public Task<IList<Product>> GetPagedCompanyProductsAsync(int id, int size, int page)
+        {
+            return productDao.GetPagedCompanyProductsAsync(id, size, page);
+        }
     }
 }
