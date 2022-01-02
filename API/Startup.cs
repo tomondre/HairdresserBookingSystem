@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Model;
+using API.Model.Products;
+using API.Models;
 using API.Persistence;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,6 +35,9 @@ namespace API
 
             services.AddSingleton<ICompanyDao, CompanyDao>();
             services.AddSingleton<ICompanyModel, CompanyModel>();
+
+            services.AddSingleton<IProductDao, ProductDao>();
+            services.AddSingleton<IProductModel, ProductModel>();
             
             services.AddControllers();
             services.AddSwaggerGen(c =>
