@@ -19,9 +19,9 @@ namespace API.Model
             return await userDao.ValidateUserAsync(user);
         }
 
-        public async Task<User> CreateUserAsync(User user)
+        public Task<User> CreateUserAsync(User user)
         {
-            return await userDao.CreateUserAsync(user);
+            return userDao.CreateUserAsync(user);
         }
     }
 }

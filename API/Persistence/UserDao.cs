@@ -29,17 +29,10 @@ namespace API.Persistence
 
         public async Task<User> CreateUserAsync(User user)
         {
-            try
-            {
-                using HairdresserDbContext context = new HairdresserDbContext();
-                var entityEntry = await context.Users.AddAsync(user);
-                await context.SaveChangesAsync();
-                return entityEntry.Entity;
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
+            using HairdresserDbContext context = new HairdresserDbContext();
+            var entityEntry = await context.Users.AddAsync(user);
+            await context.SaveChangesAsync();
+            return entityEntry.Entity;
         }
     }
 }

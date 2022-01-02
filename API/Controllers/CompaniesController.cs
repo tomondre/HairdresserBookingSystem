@@ -10,13 +10,11 @@ namespace API.Controllers
     [Route("[controller]")]
     public class CompaniesController : ControllerBase
     {
-        private IUserModel userModel;
         private ICompanyModel model;
         
         public CompaniesController(ICompanyModel model, IUserModel userModel)
         {
             this.model = model;
-            this.userModel = userModel;
         }
 
         [HttpPost]
@@ -29,6 +27,7 @@ namespace API.Controllers
             }
             catch (Exception e)
             {
+                Console.WriteLine(e);
                 return StatusCode(403, e.Message);
             }
         }
@@ -44,6 +43,7 @@ namespace API.Controllers
             }
             catch (Exception e)
             {
+                Console.WriteLine(e);
                 return StatusCode(403, e.Message);
             }
         }

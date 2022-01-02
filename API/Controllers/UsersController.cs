@@ -27,6 +27,7 @@ namespace API.Controllers
             }
             catch (Exception e)
             {
+                Console.WriteLine(e);
                 return StatusCode(401, e.Message);
             }
         }
@@ -41,6 +42,7 @@ namespace API.Controllers
             }
             catch (Exception e)
             {
+                Console.WriteLine(e);
                 return StatusCode(401, e.Message);
             }
         }
