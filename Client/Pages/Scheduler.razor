@@ -1,0 +1,21 @@
+﻿<RadzenScheduler Data="@data" TItem="DataItem" StartProperty="Start" EndProperty="End" TextProperty="Text">
+    <RadzenMonthView />
+</RadzenScheduler>
+@code {
+    class DataItem
+    {
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
+        public string Text { get; set; }
+    }
+
+    DataItem[] data = new DataItem[]
+    {
+        new DataItem
+        {
+            Start = DateTime.Today,
+            End = DateTime.Today.AddDays(1),
+            Text = "Birthday"
+        },
+    };
+}
