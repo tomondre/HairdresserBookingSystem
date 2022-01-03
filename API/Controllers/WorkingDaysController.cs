@@ -9,11 +9,11 @@ namespace API.Controllers
     
     [ApiController]
     [Route("[controller]")]
-    public class WorkingDayController : ControllerBase
+    public class WorkingDaysController : ControllerBase
     {
         private IWorkingDayModel model;
 
-        public WorkingDayController(IWorkingDayModel model)
+        public WorkingDaysController(IWorkingDayModel model)
         {
             this.model = model;
         }
