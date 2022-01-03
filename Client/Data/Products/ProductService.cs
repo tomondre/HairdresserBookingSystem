@@ -19,10 +19,10 @@ namespace Client.Data
         
         public async Task<ProductList> GetAllCompanyProducts(int id)
         {
-            var httpResponseMessage = await client.GetAsync($"{Global.url}/companies/{id}/products");
-            Global.CheckException(httpResponseMessage);
+            var httpResponseMessage = await client.GetAsync($"{Helper.url}/companies/{id}/products");
+            Helper.CheckException(httpResponseMessage);
             var readAsStringAsync = await httpResponseMessage.Content.ReadAsStringAsync();
-            var deserialize = Global.Deserialize<IList<Product>>(readAsStringAsync);
+            var deserialize = Helper.Deserialize<IList<Product>>(readAsStringAsync);
             return new ProductList
             {
                 Products = deserialize

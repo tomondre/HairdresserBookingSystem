@@ -5,7 +5,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Client
 {
-    public class Global
+    public class Helper
     {
         public static string url  = "https://localhost:5003";
 
