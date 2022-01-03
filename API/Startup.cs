@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Model;
+using API.Model.Appointments;
 using API.Model.Products;
 using API.Model.WorkingDays;
 using API.Models;
 using API.Persistence;
+using API.Persistence.Appointments;
 using API.Persistence.WorkingDays;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -43,7 +45,10 @@ namespace API
 
             services.AddSingleton<IWorkingDayDao, WorkingDayDao>();
             services.AddSingleton<IWorkingDayModel, WorkingDayModel>();
-            
+
+            services.AddSingleton<IAppointmentDao, AppointmentDao>();
+            services.AddSingleton<IAppointmentModel, AppointmentModel>();
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
