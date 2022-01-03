@@ -33,7 +33,7 @@ namespace API.Controllers
             }
         }
 
-        [HttpGet("/companies/{id:int}/workingsdays")]
+        [HttpGet("/companies/{id:int}/workingdays")]
         public async Task<ActionResult<WorkingDayList>> GetAllCompanyWorkingDaysAsync([FromRoute] int id)
         {
             try
