@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Models;
 using Client.Data;
 using Client.Models;
 using Microsoft.AspNetCore.Builder;
@@ -30,11 +31,13 @@ namespace Client
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-
+            services.AddHttpClient();
+            
             services.AddScoped<NotificationService>();
             services.AddScoped<DialogService>();
 
             services.AddScoped<IAppointmentService, AppointmentService>();
+            services.AddScoped<IProductService, ProductService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
