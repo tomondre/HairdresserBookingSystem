@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Model;
 using API.Model.Products;
+using API.Model.WorkingDays;
 using API.Models;
 using API.Persistence;
+using API.Persistence.WorkingDays;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -38,6 +40,9 @@ namespace API
 
             services.AddSingleton<IProductDao, ProductDao>();
             services.AddSingleton<IProductModel, ProductModel>();
+
+            services.AddSingleton<IWorkingDayDao, WorkingDayDao>();
+            services.AddSingleton<IWorkingDayModel, WorkingDayModel>();
             
             services.AddControllers();
             services.AddSwaggerGen(c =>
