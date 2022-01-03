@@ -33,5 +33,21 @@ namespace API.Controllers
             }
         }
 
+        [HttpGet("/companies/{id:int}/workingsdays")]
+        public async Task<ActionResult<WorkingDayList>> GetAllCompanyWorkingDaysAsync([FromRoute] int id)
+        {
+            try
+            {
+                WorkingDayList allCompanyWorkingDaysAsync = await model.GetAllCompanyWorkingDaysAsync(id);
+                return Ok(allCompanyWorkingDaysAsync);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(403, e.Message);
+            }
+        }
+        
+
     }
 }

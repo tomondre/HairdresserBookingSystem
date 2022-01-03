@@ -18,5 +18,10 @@ namespace API.Model.WorkingDays
         { 
             return dao.CreateWorkingDayAsync(workingDay);
         }
+
+        public Task<WorkingDayList> GetAllCompanyWorkingDaysAsync(int id)
+        {
+            return dao.GetAllCompanyWorkingDaysAsync(id);
+        }
     }
 }
