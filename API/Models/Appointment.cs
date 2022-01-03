@@ -1,27 +1,20 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using API.Models;
 
 namespace Client.Models
 {
     public class Appointment
     {
+        [Key]
+        public int Id { get; set; }
+        [Required]
         public DateTime Start { get; set; }
-
-        public virtual DateTime End
-        {
-            get { return Start.AddMinutes(Product.ProcedureLengthInMinutes); }
-            set { }
-        }
-
-        public virtual string Text
-        {
-            get { return Product.Name; }
-            set { }
-        }
-
-        public Product Product { get; set; }
+        [Required]
         public User Customer { get; set; }
-        
+        [Required]
+        public Product Product { get; set; }
+
         public Appointment()
         {
             Customer = new User();
