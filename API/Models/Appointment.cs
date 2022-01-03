@@ -8,12 +8,10 @@ namespace Client.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required]
         public DateTime Start { get; set; }
-        [Required]
         public User Customer { get; set; }
-        [Required]
         public Product Product { get; set; }
+        public int WorkingDayId { get; set; }
 
         public Appointment()
         {
