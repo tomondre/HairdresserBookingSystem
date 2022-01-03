@@ -1,57 +1,112 @@
 ﻿@using Radzen
 @using Microsoft.AspNetCore.Components
 @using Client.Models
+@using Client.Data
 @inject DialogService DialogService
+@inject IProductService ProductService
 
 <RadzenTemplateForm TItem="Appointment" Data="@model" Submit=@OnSubmit>
     <div class="row" style="margin-bottom: 16px">
         <div class="col-md-3">
-            <RadzenLabel Text="Text" />
+            <RadzenLabel Text="Produkt"/>
+        </div>
+
+        <div class="col">
+            @if (products != null)
+            {
+                <RadzenDropDown FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                Data=@products.Products @bind-Value=@model.Product TextProperty="Name"/>
+            }
+            else
+            {
+                <em>Loading</em>
+            }
+        </div>
+    </div>
+
+    <div class="row" style="margin-bottom: 16px">
+        <div class="col-md-3">
+            <RadzenLabel Text="Cena"/>
+        </div>
+
+        <div class="col">
+            @if (products != null)
+            {
+                <RadzenNumeric Disabled="true" TValue="double" @bind-Value="model.Product.Price"/>
+            }
+            else
+            {
+                <em>Loading...</em>
+            }
+        </div>
+    </div>
+
+    <div class="row" style="margin-bottom: 16px">
+        <div class="col-md-3">
+            <RadzenLabel Text="Dĺžka v minútach"/>
+        </div>
+
+        <div class="col">
+            @if (products != null)
+            {
+                <RadzenNumeric Disabled="true" TValue="int" @bind-Value="model.Product.ProcedureLengthInMinutes"/>
+            }
+            else
+            {
+                <em>Loading...</em>
+            }
+        </div>
+    </div>
+
+    <div class="row" style="margin-bottom: 16px">
+        <div class="col-md-3">
+            <RadzenLabel Text="Začiatok"/>
         </div>
         <div class="col">
-            <RadzenTextBox @bind-Value="@model.Text" Name="Text" ReadOnly="true"/>
-            <RadzenRequiredValidator Text="Title is required" Component="Text" />
+            <RadzenDatePicker @bind-Value="@model.Start" Name="Start" ShowTime="true"/>
+            <RadzenRequiredValidator Text="Start is required" Component="Start"/>
         </div>
     </div>
     <div class="row" style="margin-bottom: 16px">
         <div class="col-md-3">
-            <RadzenLabel Text="Start" />
+            <RadzenLabel Text="Koniec"/>
         </div>
         <div class="col">
-            <RadzenDatePicker @bind-Value="@model.Start" Name="Start" ShowTime="true" />
-            <RadzenRequiredValidator Text="Start is required" Component="Start" />
-        </div>
-    </div>
-    <div class="row" style="margin-bottom: 16px">
-        <div class="col-md-3">
-            <RadzenLabel Text="End" />
-        </div>
-        <div class="col">
-            <RadzenDatePicker Name="End" @bind-Value="@model.End" ShowTime="true" ReadOnly="true"  />
-            <RadzenRequiredValidator Component="End" Text="End is required" />
+            <RadzenDatePicker Name="End" @bind-Value="@model.End" ShowTime="true" ReadOnly="true"/>
         </div>
     </div>
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col">
-            <RadzenButton ButtonType="ButtonType.Submit" Text="Save" />
+            <RadzenButton ButtonType="ButtonType.Submit" Text="Save"/>
         </div>
     </div>
 </RadzenTemplateForm>
+
 @code {
+
     [Parameter]
     public DateTime Start { get; set; }
 
+    private ProductList products;
 
-    Appointment model = new ();
+
+    Appointment model = new();
 
     protected override void OnParametersSet()
     {
         model.Start = Start;
     }
 
+    protected override async Task OnInitializedAsync()
+    {
+        products = await ProductService.GetAllCompanyProducts(3);
+        model.Product = products.Products[0];
+    }
+
     void OnSubmit(Appointment model)
     {
         DialogService.Close(model);
     }
+
 }
