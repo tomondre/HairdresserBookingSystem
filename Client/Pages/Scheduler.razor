@@ -48,7 +48,7 @@ else
   async Task OnAppointmentSelect(SchedulerAppointmentSelectEventArgs<Appointment> args)
   {
 
-    await DialogService.OpenAsync<EditAppointmentPage>("Edit Appointment", new Dictionary<string, object> { { "Appointment", args.Data } });
+    await DialogService.OpenAsync<EditAppointmentPage>("Edit Appointment", new Dictionary<string, object> { { "model", args.Data } });
 
     await scheduler.Reload();
   }
