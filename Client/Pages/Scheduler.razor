@@ -1,21 +1,73 @@
-﻿<RadzenScheduler Data="@data" TItem="DataItem" StartProperty="Start" EndProperty="End" TextProperty="Text">
-    <RadzenMonthView />
-</RadzenScheduler>
-@code {
-    class DataItem
-    {
-        public DateTime Start { get; set; }
-        public DateTime End { get; set; }
-        public string Text { get; set; }
-    }
+﻿@using Client.Models
+@using Radzen
+@using API.Models
+@using Client.Data
+@inject DialogService DialogService
+@inject IAppointmentService AppointmentService
 
-    DataItem[] data = new DataItem[]
+@if (appointments == null)
+{
+  <em>Loading, please wait</em>
+}
+else
+{
+  <RadzenScheduler @ref=@scheduler Name="Scheduler" Data="@appointments" TItem="Appointment" StartProperty="Start" EndProperty="End" TextProperty="Text"
+                   SlotSelect=@OnSlotSelect AppointmentSelect=@OnAppointmentSelect AppointmentRender=@OnAppointmentRender
+                   Style="height: 768px">
+    <RadzenDayView/>
+    <RadzenWeekView/>
+    <RadzenMonthView/>
+  </RadzenScheduler>
+}
+
+
+
+@code {
+  RadzenScheduler<Appointment> scheduler;
+  
+  IList<Appointment> appointments;
+  
+  protected override async Task OnInitializedAsync()
+  {
+     appointments = (await AppointmentService.GetWorkingDayAsync(1)).Appointments;
+  }
+
+  public async Task OnSlotSelect(SchedulerSlotSelectEventArgs args)
+  {
+
+    Appointment data = await DialogService.OpenAsync<AddAppointmentPage>("Add Appointment",
+      new Dictionary<string, object> { { "Start", args.Start }});
+
+    if (data != null)
     {
-        new DataItem
-        {
-            Start = DateTime.Today,
-            End = DateTime.Today.AddDays(1),
-            Text = "Birthday"
-        },
-    };
+      appointments.Add(data);
+      await scheduler.Reload();
+    }
+  }
+
+  async Task OnAppointmentSelect(SchedulerAppointmentSelectEventArgs<Appointment> args)
+  {
+
+    await DialogService.OpenAsync<EditAppointmentPage>("Edit Appointment", new Dictionary<string, object> { { "Appointment", args.Data } });
+
+    await scheduler.Reload();
+  }
+
+  void OnAppointmentRender(SchedulerAppointmentRenderEventArgs<Appointment> args)
+  {
+  // Never call StateHasChanged in AppointmentRender - would lead to infinite loop
+
+    if (args.Data.Text == "Otváracie hodiny")
+    {
+      args.Attributes["style"] = "background: cyan";
+    }
+    else if (args.Data.Text == "Pánsky Strih")
+    {
+      args.Attributes["style"] = "background: red";
+    }
+    else
+    {
+      args.Attributes["style"] = "background: grey";
+    }
+  }
 }
