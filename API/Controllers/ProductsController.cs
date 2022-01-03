@@ -36,7 +36,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Product>> GetProductByIdAsync([FromQuery] int id)
+        public async Task<ActionResult<Product>> GetProductByIdAsync([FromRoute] int id)
         {
             try
             {
