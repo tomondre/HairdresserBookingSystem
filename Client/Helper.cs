@@ -25,5 +25,14 @@ namespace Client
             });
             return deserialize;
         }
+
+        public static string Serialize(object o)
+        {
+            var serialize = JsonSerializer.Serialize(o, new JsonSerializerOptions()
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            });
+            return serialize;
+        }
     }
 }
