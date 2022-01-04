@@ -6,5 +6,6 @@ namespace API.Persistence.Appointments
     public interface IAppointmentDao
     {
         Task<Appointment> CreateAppointmentAsync(Appointment appointment);
+        Task<AppointmentList> GetAllCompanyAppointmentsAsync(int id);
     }
 }

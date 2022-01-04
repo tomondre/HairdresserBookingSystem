@@ -6,5 +6,6 @@ namespace API.Model.Appointments
     public interface IAppointmentModel
     {
         Task<Appointment> CreateAppointmentAsync(Appointment appointment2);
+        Task<AppointmentList> GetAllCompanyAppointmentsAsync(int id);
     }
 }

@@ -17,5 +17,10 @@ namespace API.Model.Appointments
         {
             return dao.CreateAppointmentAsync(appointment);
         }
+
+        public Task<AppointmentList> GetAllCompanyAppointmentsAsync(int id)
+        {
+            return dao.GetAllCompanyAppointmentsAsync(id);
+        }
     }
 }

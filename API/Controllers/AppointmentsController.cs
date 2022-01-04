@@ -33,5 +33,19 @@ namespace API.Controllers
             }
         }
 
+        [HttpGet("/companies/{id:int}/appointments")]
+        public async Task<ActionResult<AppointmentList>> GetAllCompanyAppointmentsAsync([FromRoute] int id)
+        {
+            try
+            {
+                AppointmentList result = await model.GetAllCompanyAppointmentsAsync(id);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(403, e.Message);
+            }
+        }
+
     }
 }

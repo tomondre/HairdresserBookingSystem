@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using API.DataAccess;
 using Client.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace API.Persistence.Appointments
 {
@@ -35,6 +36,23 @@ namespace API.Persistence.Appointments
             var entityEntry = await context.Appointments.AddAsync(appointment);
             await context.SaveChangesAsync();
             return entityEntry.Entity;
+        }
+
+        public async Task<AppointmentList> GetAllCompanyAppointmentsAsync(int id)
+        {
+            await using HairdresserDbContext context = new HairdresserDbContext();
+
+            var appointments = context.Appointments.Include("Product").Where(a => a.Product.CompanyId == id).ToList();
+            if (!appointments.Any())
+            {
+                throw new Exception("Company doesn't contain any appointments or company doesn't exist");
+            }
+
+            return new AppointmentList()
+            {
+                Appointments = appointments
+            };  
+
         }
     }
 }
