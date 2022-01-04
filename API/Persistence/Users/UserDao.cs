@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using API.DataAccess;
 using API.Models;
 using Microsoft.EntityFrameworkCore;
+using Shared.Models;
 
 namespace API.Persistence
 {
@@ -25,14 +26,6 @@ namespace API.Persistence
             }
 
             return first;
-        }
-
-        public async Task<User> CreateUserAsync(User user)
-        {
-            using HairdresserDbContext context = new HairdresserDbContext();
-            var entityEntry = await context.Users.AddAsync(user);
-            await context.SaveChangesAsync();
-            return entityEntry.Entity;
         }
     }
 }

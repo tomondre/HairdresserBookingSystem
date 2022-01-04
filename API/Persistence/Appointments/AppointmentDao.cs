@@ -2,9 +2,11 @@
 using System.Linq;
 using System.Threading.Tasks;
 using API.DataAccess;
+using API.Models;
 using Client.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using Shared.Models;
 
 namespace API.Persistence.Appointments
 {
@@ -13,7 +15,7 @@ namespace API.Persistence.Appointments
         public async Task<Appointment> CreateAppointmentAsync(Appointment appointment)
         {
             await using HairdresserDbContext context = new HairdresserDbContext();
-            var customer = await context.Users.FirstOrDefaultAsync(u => u.Id == appointment.Customer.Id);
+            var customer = await context.Users.OfType<Customer>().FirstOrDefaultAsync(u => u.Id == appointment.Customer.Id);
             if (customer == null)
             {
                 throw new Exception("Assigned user doesn't exist");

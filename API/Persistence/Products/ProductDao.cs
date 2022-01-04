@@ -5,6 +5,7 @@ using API.DataAccess;
 using API.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
+using Shared.Models;
 
 namespace API.Persistence
 {

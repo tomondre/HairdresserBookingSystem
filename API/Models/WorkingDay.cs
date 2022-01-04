@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using API.Models;
+using Shared.Models;
 
 namespace Client.Models
 {

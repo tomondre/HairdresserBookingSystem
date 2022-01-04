@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using API.Models;
 using API.Persistence;
+using Shared.Models;
 
 namespace API.Model
 {
@@ -19,9 +20,5 @@ namespace API.Model
             return await userDao.ValidateUserAsync(user);
         }
 
-        public Task<User> CreateUserAsync(User user)
-        {
-            return userDao.CreateUserAsync(user);
-        }
     }
 }

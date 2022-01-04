@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using API.Models;
 
-namespace API.Models
+namespace Shared.Models
 {
     public class Company
     {
@@ -10,8 +11,13 @@ namespace API.Models
         
         public string Name { get; set; }
         
-        public User User { get; set; }
+        public CompanyOwner User { get; set; }
 
         public IList<Product> Products { get; set; }
+        
+        public Company()
+        {
+            User = new CompanyOwner();
+        }
     }
 }

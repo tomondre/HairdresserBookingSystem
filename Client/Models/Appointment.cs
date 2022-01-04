@@ -1,5 +1,6 @@
 ﻿using System;
 using API.Models;
+using Shared.Models;
 
 namespace Client.Models
 {

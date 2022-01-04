@@ -2,6 +2,7 @@
 using System.Text;
 using System.Threading.Tasks;
 using API.Models;
+using Shared.Models;
 
 namespace Client.Data.Users
 {

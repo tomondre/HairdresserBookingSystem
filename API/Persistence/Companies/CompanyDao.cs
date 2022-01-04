@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using API.DataAccess;
 using API.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Shared.Models;
 
 namespace API.Persistence
 {
@@ -13,7 +15,7 @@ namespace API.Persistence
         public async Task<Company> CreateCompanyAsync(Company company)
         {
             await using HairdresserDbContext context = new HairdresserDbContext();
-            var firstOrDefaultAsync = await context.Users.FirstOrDefaultAsync((user) => user.Id == company.User.Id);
+            var firstOrDefaultAsync = await context.Users.OfType<CompanyOwner>().FirstOrDefaultAsync((user) => user.Id == company.User.Id);
             if (firstOrDefaultAsync == null)
             {
                 throw new Exception("User doesnt exist");

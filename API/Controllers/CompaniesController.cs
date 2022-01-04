@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using API.Model;
 using API.Models;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Models;
 
 namespace API.Controllers
 {
@@ -13,7 +14,7 @@ namespace API.Controllers
     {
         private ICompanyModel model;
         
-        public CompaniesController(ICompanyModel model, IUserModel userModel)
+        public CompaniesController(ICompanyModel model)
         {
             this.model = model;
         }
