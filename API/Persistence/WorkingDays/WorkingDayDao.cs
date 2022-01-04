@@ -28,7 +28,7 @@ namespace API.Persistence.WorkingDays
         {
             await using HairdresserDbContext context = new HairdresserDbContext();
             IQueryable<WorkingDay> days;
-            days = context.WorkingDays.Include(d => d.Appointments).Where(d => d.Company.Id == id);
+            days = context.WorkingDays.Include(d => d.Appointments).ThenInclude(a => a.Product).Where(d => d.Company.Id == id);
             if (!days.Any())
             {
                 throw new Exception("Company hasn't created working days or company doesn't exist");
