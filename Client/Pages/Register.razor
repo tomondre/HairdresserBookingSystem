@@ -1,0 +1,48 @@
+﻿@using Microsoft.AspNetCore.Components
+@using Radzen
+@using API.Models
+<h3>Register</h3>
+<div class="col-md-6">
+    <RadzenTemplateForm TItem="User" Data="user" Submit=@Submit >
+        <RadzenFieldset Text="Registrácia">
+            <div class="row">
+                <div class="col-md-4 align-items-center d-flex">
+                    <RadzenLabel Text="Email"/>
+                </div>
+                <div class="col-md-8">
+                    <RadzenTextBox Class="w-100" style="width: 100%; display: block" @bind-Value="user.Email" Name="Email"/>
+                    <RadzenRequiredValidator Component="Email" Text="Email je povinný" Style="position: absolute"/>
+                    <RadzenEmailValidator Component="Email" Text="Email je neplatný" Style="position: absolute"/>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 align-items-center d-flex">
+                    <RadzenLabel Text="Password"/>
+                </div>
+                <div class="col-md-8">
+                    <RadzenPassword style="width: 100%;" @bind-Value="user.Password" Name="Password"/>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Uložiť"/>
+            </div>
+        </RadzenFieldset>
+    </RadzenTemplateForm>
+</div>
+
+@code {
+    private User user = new User();
+
+    public void Submit()
+    {
+           
+    }
+
+}
+
+<style>
+    form .row {
+        margin-bottom: 25px;
+    }
+</style>
