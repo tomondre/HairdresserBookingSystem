@@ -18,7 +18,7 @@ namespace API.Controllers
             model = userModel;
         }
 
-        [HttpPost("login")]
+        [HttpPost("/login")]
         public async Task<ActionResult<User>> ValidateUserAsync([FromBody] User user)
         {
             try

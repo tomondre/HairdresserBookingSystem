@@ -8,5 +8,7 @@ namespace Client.Data.Users
     {
         Task<User> GetCachedUserAsync();
         Task<Company> GetOpenedCompanyAsync();
+        Task SaveUserAsync(User user);
+        Task<User> GetUserAsync(User user);
     }
 }

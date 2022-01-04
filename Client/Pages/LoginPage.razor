@@ -1,6 +1,10 @@
 ﻿@using Radzen
 @using API.Models
+@using Client.Data.Authentication
 @using global::Shared.Models
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+
 <div class="col-xl-4 p-3">
     <RadzenCard>
         <h2 class="mb-4">Register and password reset</h2>
@@ -21,14 +25,24 @@
 
 
 @code {
-    void OnLogin(LoginArgs args, string name)
+
+    async Task OnLogin(LoginArgs args, string name)
     {
         User user = new User()
         {
             Email = args.Username,
             Password = Helper.Hash(args.Password)
         };
-    // console.Log($"{name} -> Username: {args.Username} and password: {args.Password}");
+        try
+        {
+            await ((CustomAuthenticationStateProvider) AuthenticationStateProvider).ValidateUser(user);
+            NavigationManager.NavigateTo("/");            
+        }
+        catch (Exception e)
+        {
+            //TODO display error handling
+            Console.WriteLine(e);
+        }
     }
     
     void OnRegister(string name)

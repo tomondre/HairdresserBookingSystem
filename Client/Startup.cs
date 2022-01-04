@@ -5,11 +5,14 @@ using System.Threading.Tasks;
 using API.Models;
 using Client.Data;
 using Client.Data.Appointments;
+using Client.Data.Authentication;
+using Client.Data.Caches;
 using Client.Data.Users;
 using Client.Data.WorkingDays;
 using Client.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
@@ -38,6 +41,7 @@ namespace Client
             
             services.AddScoped<NotificationService>();
             services.AddScoped<DialogService>();
+            services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 
             services.AddScoped<IWorkingDayService, WorkingDayService>();
             services.AddScoped<IProductService, ProductService>();
