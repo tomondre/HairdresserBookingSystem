@@ -16,5 +16,14 @@ namespace Client.Data.Users
 
             return user;
         }
+
+        public async Task<Company> GetOpenedCompanyAsync()
+        {
+            return new Company()
+            {
+                Id = 3,
+                Name = "string"
+            };
+        }
     }
 }

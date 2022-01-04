@@ -6,5 +6,6 @@ namespace Client.Data.Users
     public interface ICacheService
     {
         Task<User> GetCachedUserAsync();
+        Task<Company> GetOpenedCompanyAsync();
     }
 }
