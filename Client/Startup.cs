@@ -43,6 +43,7 @@ namespace Client
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IAppointmentService, AppointmentService>();
             services.AddScoped<ICacheService, CacheService>();
+            services.AddScoped<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
