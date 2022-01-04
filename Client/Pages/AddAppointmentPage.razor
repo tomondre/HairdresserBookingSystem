@@ -2,8 +2,14 @@
 @using Microsoft.AspNetCore.Components
 @using Client.Models
 @using Client.Data
+@using Client.Data.Appointments
+@using Client.Data.Users
+
 @inject DialogService DialogService
 @inject IProductService ProductService
+@inject IAppointmentService AppointmentService
+@inject ICacheService CacheService
+
 
 <RadzenTemplateForm TItem="Appointment" Data="@model" Submit=@OnSubmit>
     <div class="row" style="margin-bottom: 16px">
@@ -78,7 +84,7 @@
     <div class="row">
         <div class="col-md-3"></div>
         <div class="col">
-            <RadzenButton ButtonType="ButtonType.Submit" Text="Save"/>
+            <RadzenButton Disabled="@(Loading)" Style="@(Loading ? "cursor: \"wait;\"" : "")" ButtonType="ButtonType.Submit" Text="Save"/>
         </div>
     </div>
 </RadzenTemplateForm>
@@ -90,7 +96,8 @@
 
     private ProductList products;
 
-
+    private bool Loading = false;
+    
     Appointment model = new();
 
     protected override void OnParametersSet()
@@ -100,12 +107,27 @@
 
     protected override async Task OnInitializedAsync()
     {
-        products = await ProductService.GetAllCompanyProducts(3);
+        var allCompanyProducts = ProductService.GetAllCompanyProducts(3);
+        var cachedUserAsync = CacheService.GetCachedUserAsync();
+        var openedCompanyAsync = CacheService.GetOpenedCompanyAsync();
+        await Task.WhenAll(allCompanyProducts, cachedUserAsync, openedCompanyAsync);
+        
+        products = allCompanyProducts.Result;
+        model.Customer = cachedUserAsync.Result;
         model.Product = products.Products[0];
     }
 
     void OnSubmit(Appointment model)
     {
+        Loading = true;
+        try
+        {
+            
+            AppointmentService.CreateAppointmentAsync(model);
+        }
+        catch (Exception e)
+        {
+        }
         DialogService.Close(model);
     }
 
