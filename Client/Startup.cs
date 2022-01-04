@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using API.Models;
 using Client.Data;
 using Client.Data.Appointments;
+using Client.Data.Users;
 using Client.Data.WorkingDays;
 using Client.Models;
 using Microsoft.AspNetCore.Builder;
@@ -41,6 +42,7 @@ namespace Client
             services.AddScoped<IWorkingDayService, WorkingDayService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IAppointmentService, AppointmentService>();
+            services.AddScoped<ICacheService, CacheService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
