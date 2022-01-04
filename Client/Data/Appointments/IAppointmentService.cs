@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
 using Client.Models;
 
-namespace Client.Data
+namespace Client.Data.Appointments
 {
     public interface IAppointmentService
     {
-        Task<WorkingDayList> GetWorkingDayAsync(int companyId);
+        Task<Appointment> CreateAppointmentAsync(Appointment appointment);
     }
 }
