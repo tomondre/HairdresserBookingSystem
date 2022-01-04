@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Models;
 using Client.Data;
+using Client.Data.Appointments;
+using Client.Data.WorkingDays;
 using Client.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
@@ -36,8 +38,9 @@ namespace Client
             services.AddScoped<NotificationService>();
             services.AddScoped<DialogService>();
 
-            services.AddScoped<IAppointmentService, AppointmentService>();
+            services.AddScoped<IWorkingDayService, WorkingDayService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IAppointmentService, AppointmentService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
