@@ -25,7 +25,7 @@
         User user = new User()
         {
             Email = args.Username,
-            Password = Helper.ComputeSha256Hash(args.Password)
+            Password = Helper.Hash(args.Password)
         };
     // console.Log($"{name} -> Username: {args.Username} and password: {args.Password}");
     }
