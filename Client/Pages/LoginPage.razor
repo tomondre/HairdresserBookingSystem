@@ -9,7 +9,7 @@
     <RadzenCard>
         <h2 class="mb-4">Register and password reset</h2>
         <RadzenTemplateForm Data=@("LoginWithRegisterAndReset")>
-            <RadzenLogin Login=@(args => OnLogin(args, "Login with register and password reset")) 
+            <RadzenLogin Login=@(args => OnLogin(args, "Prihlásenie")) 
                          ResetPassword=@(args => OnResetPassword(args, "Login with register and password reset"))
                          Register=@(args => OnRegister("Login with register and password reset")) 
                          LoginText="Prihlásiť" UserText="Email" PasswordText="Heslo"
@@ -36,7 +36,8 @@
         try
         {
             await ((CustomAuthenticationStateProvider) AuthenticationStateProvider).ValidateUser(user);
-            NavigationManager.NavigateTo("/");            
+            NavigationManager.NavigateTo("/");
+            
         }
         catch (Exception e)
         {
