@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using API.Models;
 using Client.Models;
 
 namespace Client.Data
@@ -7,5 +8,6 @@ namespace Client.Data
     public interface IProductService
     {
         Task<ProductList> GetAllCompanyProducts(int id);
+        Task<Product> CreateProductAsync(Product product);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using API.Models;
 using Client.Models;
@@ -28,7 +29,16 @@ namespace Client.Data
                 Products = deserialize
             };
         }
-        
-        
+
+        public async Task<Product> CreateProductAsync(Product product)
+        {
+            var serialize = Helper.Serialize(product);
+            var stringContent = new StringContent(serialize, Encoding.UTF8, "application/json");
+            var postAsync = await client.PostAsync($"{Helper.url}/products", stringContent);
+            Helper.CheckException(postAsync);
+            var readAsStringAsync = await postAsync.Content.ReadAsStringAsync();
+            var deserialize = Helper.Deserialize<Product>(readAsStringAsync);
+            return deserialize;
+        }
     }
 }
