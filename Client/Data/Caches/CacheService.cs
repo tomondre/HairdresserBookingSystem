@@ -16,14 +16,8 @@ namespace Client.Data.Caches
         
         public async Task<User> GetCachedUserAsync()
         {
-            var user = new User()
-            {
-                Id = 4,
-                Email = "michalko700@gmail.com",
-                UserType = "string"
-            };
-
-            return user;
+            var protectedBrowserStorageResult = await sessionStorage.GetAsync<User>("currentUser");
+            return protectedBrowserStorageResult.Value;
         }
 
         public async Task<Company> GetOpenedCompanyAsync()
