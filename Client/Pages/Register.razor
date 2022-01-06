@@ -1,30 +1,57 @@
 ﻿@using Microsoft.AspNetCore.Components
 @using Radzen
 @using API.Models
+@using Client.Data.Authentication
+@using Client.Data.Customers
 @using global::Shared.Models
 
+@inject ICustomerService CustomerService
+@inject AuthenticationStateProvider AuthenticationStateProvider 
+
 <div class="col-md-6">
-    <RadzenTemplateForm TItem="User" Data="user" Submit=@Submit >
+    <RadzenTemplateForm TItem="Customer" Data="newCustomer" Submit=@Submit >
         <RadzenFieldset Text="Registrácia">
             <div class="row">
                 <div class="col-md-4 align-items-center d-flex">
                     <RadzenLabel Text="Email"/>
                 </div>
                 <div class="col-md-8">
-                    <RadzenTextBox Class="w-100" style="width: 100%; display: block" @bind-Value="user.Email" Name="Email"/>
+                    <RadzenTextBox Class="w-100" style="width: 100%; display: block" @bind-Value="newCustomer.Email" Name="Email"/>
                     <RadzenRequiredValidator Component="Email" Text="Email je povinný" Style="position: absolute"/>
                     <RadzenEmailValidator Component="Email" Text="Email je neplatný" Style="position: absolute"/>
                 </div>
             </div>
-
             <div class="row">
                 <div class="col-md-4 align-items-center d-flex">
                     <RadzenLabel Text="Password"/>
                 </div>
                 <div class="col-md-8">
-                    <RadzenPassword style="width: 100%;" @bind-Value="user.Password" Name="Password"/>
+                    <RadzenPassword style="width: 100%;" @bind-Value="newCustomer.Password" Name="Password"/>
+                    @* <RadzenRegexValidator Pattern="" Component="Password" Text="Heslo musí obsahovať: jedno veľké písmeno, jedno malé písmeno a číslo."></RadzenRegexValidator> *@
+                    <RadzenRequiredValidator Component="Password" Text="Heslo je povinné!"></RadzenRequiredValidator>
+                    </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 align-items-center d-flex">
+                    <RadzenLabel Text="Meno"/>
+                </div>
+                <div class="col-md-8">
+                    <RadzenTextBox style="width: 100%;" @bind-Value="newCustomer.FirstName" Name="FirstName"/>
+                    <RadzenRequiredValidator Component="FirstName" Text="Meno je povinné!"></RadzenRequiredValidator>
+                    </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 align-items-center d-flex">
+                    <RadzenLabel Text="Priezvisko"/>
+                </div>
+                <div class="col-md-8">
+                    <RadzenTextBox style="width: 100%;" @bind-Value="newCustomer.LastName" Name="LastName"/>
+                    <RadzenRequiredValidator Component="LastName" Text="Priezvisko je povinné"></RadzenRequiredValidator>
                 </div>
             </div>
+            
             <div class="row justify-content-center">
                 <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Uložiť"/>
             </div>
@@ -33,11 +60,21 @@
 </div>
 
 @code {
-    private User user = new User();
+    private Customer newCustomer = new Customer();
 
-    public void Submit()
+    public async Task Submit()
     {
-           
+        try
+        {
+            var customer = newCustomer.Copy();
+            customer.Password = Helper.Hash(newCustomer.Password);
+            var customerAsync = await CustomerService.CreateCustomerAsync(newCustomer);
+            await ((CustomAuthenticationStateProvider) AuthenticationStateProvider).ValidateUser(customerAsync);
+        }
+        catch (Exception e)
+        {
+            
+        }
     }
 
 }
