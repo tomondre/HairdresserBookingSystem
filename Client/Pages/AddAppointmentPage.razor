@@ -108,7 +108,7 @@
     protected override async Task OnInitializedAsync()
     {
         var allCompanyProducts = ProductService.GetAllCompanyProducts(3);
-        var cachedUserAsync = CacheService.GetCachedUserAsync();
+        var cachedUserAsync = CacheService.GetUserAsync();
         var openedCompanyAsync = CacheService.GetOpenedCompanyAsync();
         await Task.WhenAll(allCompanyProducts, cachedUserAsync, openedCompanyAsync);
         

@@ -26,7 +26,7 @@ namespace Client.Data.Authentication
             var identity = new ClaimsIdentity();
             if (cachedUser == null)
             {
-                var userFromStorage = await cacheService.GetCachedUserAsync();
+                var userFromStorage = await cacheService.GetUserAsync();
                 if (userFromStorage != null)
                 {
                     await ValidateUser(userFromStorage);
