@@ -35,7 +35,7 @@ else
   public async Task OnSlotSelect(SchedulerSlotSelectEventArgs args)
   {
 
-    Appointment data = await DialogService.OpenAsync<AddAppointmentPage>("Add Appointment",
+    Appointment data = await DialogService.OpenAsync<AddAppointmentComponent>("Add Appointment",
       new Dictionary<string, object> { { "Start", args.Start }});
 
     if (data != null)
