@@ -12,7 +12,7 @@ namespace API.Persistence.Customers
         public async Task<Customer> CreateCustomerAsync(Customer customer)
         {
             using HairdresserDbContext context = new HairdresserDbContext();
-            var firstOrDefaultAsync = await context.Customers.FirstOrDefaultAsync(c => c.Email == customer.Email);
+            var firstOrDefaultAsync = await context.Users.FirstOrDefaultAsync(c => c.Email == customer.Email);
             if (firstOrDefaultAsync != null)
             {
                 throw new Exception("Customer with the given email already exist!");

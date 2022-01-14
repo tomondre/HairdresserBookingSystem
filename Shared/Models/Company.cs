@@ -11,13 +11,10 @@ namespace Shared.Models
         
         public string Name { get; set; }
         
-        public CompanyOwner User { get; set; }
-
         public IList<Product> Products { get; set; }
         
         public Company()
         {
-            User = new CompanyOwner();
         }
     }
 }
