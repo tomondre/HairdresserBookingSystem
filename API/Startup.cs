@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Model;
 using API.Model.Appointments;
+using API.Model.CompanyOwners;
 using API.Model.Customers;
 using API.Model.Products;
 using API.Model.WorkingDays;
 using API.Models;
 using API.Persistence;
 using API.Persistence.Appointments;
+using API.Persistence.CompanyOwners;
 using API.Persistence.Customers;
 using API.Persistence.WorkingDays;
 using Microsoft.AspNetCore.Builder;
@@ -53,6 +55,9 @@ namespace API
 
             services.AddSingleton<ICustomerDao, CustomerDao>();
             services.AddSingleton<ICustomerModel, CustomerModel>();
+
+            services.AddSingleton<ICompanyOwnerDao, CompanyOwnerDao>();
+            services.AddSingleton<ICompanyOwnerModel, CompanyOwnerModel>();
             
             services.AddControllers();
             services.AddSwaggerGen(c =>
