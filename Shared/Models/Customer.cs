@@ -2,7 +2,6 @@
 {
     public class Customer : User
     {
-        public override string UserType { get; set; } = "Customer";
         public string FirstName { get; set; }
         public string LastName { get; set; }
 

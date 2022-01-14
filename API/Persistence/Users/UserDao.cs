@@ -20,11 +20,19 @@ namespace API.Persistence
                 throw new Exception("User doesnt exist");
             }
 
-            if (!(first.Password == user.Password))
+            if (first.Password != user.Password)
             {
                 throw new Exception("Incorrect Password");
             }
 
+            //Want to fetch company if logged in user is CompanyOwner
+            //This is very stupid solution
+            if (first is CompanyOwner)
+            {
+                first = await context.CompanyOwners.Include(co => co.Company).FirstOrDefaultAsync(u => u.Email == user.Email);
+            }
+
+            first.UserType = first.GetType().Name;
             return first;
         }
     }

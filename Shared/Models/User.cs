@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.InteropServices.ComTypes;
 
 namespace Shared.Models
@@ -11,7 +12,8 @@ namespace Shared.Models
         public string Email { get; set; }
         public string Password { get; set; }
 
-        public virtual string UserType { get; set; }
+        [NotMapped]
+        public string UserType { get; set; }
 
         public User Copy()
         {
