@@ -46,7 +46,7 @@ namespace Client.Data.Authentication
         {
             List<Claim> claims = new List<Claim>
             {
-                new(ClaimTypes.Role, user.UserType)
+                new(ClaimTypes.Role, user.SecurityType)
             };
             ClaimsIdentity identity = new ClaimsIdentity(claims, "apiauth_type");
             return identity;

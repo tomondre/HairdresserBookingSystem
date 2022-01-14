@@ -6,6 +6,7 @@
 </div>
 
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+
     <ul class="nav flex-column">
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
@@ -13,21 +14,26 @@
             </NavLink>
         </li>
     </ul>
-    <ul class="nav flex-column">
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="product/add" Match="NavLinkMatch.All">
-                <span class="oi oi-box" aria-hidden="true"></span>Add Product
-            </NavLink>
-        </li>
-    </ul>
-    <ul class="nav flex-column">
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="product/all" Match="NavLinkMatch.All">
-                <span class="oi oi-box" aria-hidden="true"></span>All Product
-            </NavLink>
-        </li>
-    </ul>
-    
+
+    <AuthorizeView Policy="CompanyOwner">
+        <ul class="nav flex-column">
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="product/add" Match="NavLinkMatch.Prefix">
+                    <span class="oi oi-box" aria-hidden="true"></span>Add Product
+                </NavLink>
+            </li>
+        </ul>
+
+        <ul class="nav flex-column">
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="product/all" Match="NavLinkMatch.Prefix">
+                    <span class="oi oi-box" aria-hidden="true"></span>All Product
+                </NavLink>
+            </li>
+        </ul>
+
+    </AuthorizeView>
+
 </div>
 
 @code {

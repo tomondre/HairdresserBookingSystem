@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using API.Models;
 using Client.Data;
@@ -8,6 +9,7 @@ using Client.Data.Appointments;
 using Client.Data.Authentication;
 using Client.Data.Caches;
 using Client.Data.Companies;
+using Client.Data.CompanyOwners;
 using Client.Data.Customers;
 using Client.Data.Users;
 using Client.Data.WorkingDays;
@@ -21,6 +23,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Radzen;
+using Shared.Models;
 
 namespace Client
 {
@@ -52,6 +55,13 @@ namespace Client
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<ICompanyService, CompanyService>();
+            services.AddScoped<ICompanyOwnerService, CompanyOwnerService>();
+            
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("CompanyOwner", a => a.RequireAuthenticatedUser().RequireClaim(ClaimTypes.Role, "CompanyOwner"));
+                options.AddPolicy("Customer", a => a.RequireAuthenticatedUser().RequireClaim(ClaimTypes.Role, "Customer"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
