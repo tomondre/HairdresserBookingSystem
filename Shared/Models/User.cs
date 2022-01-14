@@ -13,7 +13,7 @@ namespace Shared.Models
         public string Password { get; set; }
 
         [NotMapped]
-        public string UserType { get; set; }
+        public string SecurityType { get; set; }
 
         public User Copy()
         {
@@ -22,7 +22,7 @@ namespace Shared.Models
                 Id = Id,
                 Email = Email,
                 Password = Password,
-                UserType = UserType
+                SecurityType = SecurityType
             };
         }
     }

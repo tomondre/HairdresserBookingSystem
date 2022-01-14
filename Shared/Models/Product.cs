@@ -11,6 +11,5 @@ namespace API.Models
         public double Price { get; set; }
         public int ProcedureLengthInMinutes { get; set; }
         public int CompanyId { get; set; }
-        public int CompanyUserId { get; set; }
     }
 }

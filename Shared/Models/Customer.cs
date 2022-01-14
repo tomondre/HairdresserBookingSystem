@@ -12,7 +12,7 @@
                 Id = Id,
                 Email = Email,
                 Password = Password,
-                UserType = UserType,
+                SecurityType = SecurityType,
                 FirstName = FirstName,
                 LastName = LastName
             };
