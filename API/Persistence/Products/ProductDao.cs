@@ -17,7 +17,7 @@ namespace API.Persistence
             var firstOrDefaultAsync = await context.Companies.FirstOrDefaultAsync(company => company.Id == product.CompanyId);
             if (firstOrDefaultAsync == null)
             {
-                throw new Exception("User Not Found");
+                throw new Exception("Company Not Found");
             }
 
             var entityEntry = await context.Products.AddAsync(product);
