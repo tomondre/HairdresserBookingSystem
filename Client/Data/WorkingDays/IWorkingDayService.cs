@@ -6,5 +6,6 @@ namespace Client.Data
     public interface IWorkingDayService
     {
         Task<WorkingDayList> GetWorkingDayAsync(int companyId);
+        Task<WorkingDay> CreateWorkingDayAsync(WorkingDay model);
     }
 }
