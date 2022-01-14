@@ -14,7 +14,7 @@ namespace Client.Data.Caches
             this.sessionStorage = sessionStorage;
         }
         
-        public async Task<User> GetCachedUserAsync()
+        public async Task<User> GetUserAsync()
         {
             var protectedBrowserStorageResult = await sessionStorage.GetAsync<User>("currentUser");
             return protectedBrowserStorageResult.Value;
@@ -32,12 +32,6 @@ namespace Client.Data.Caches
         public async Task SaveUserAsync(User user)
         {
             await sessionStorage.SetAsync("currentUser", user);
-        }
-        
-        public async Task<User> GetUserAsync(User user)
-        {
-            var protectedBrowserStorageResult = await sessionStorage.GetAsync<User>("currentUser");
-            return protectedBrowserStorageResult.Value;
         }
     }
 }
