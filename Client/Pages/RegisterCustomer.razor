@@ -1,6 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Components
 @using Radzen
-@using API.Models
 @using Client.Data.Authentication
 @using Client.Data.Customers
 @using global::Shared.Models
@@ -73,7 +72,7 @@
         }
         catch (Exception e)
         {
-            
+            Console.Write(e.Message);
         }
     }
 
