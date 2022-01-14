@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace Shared.Models
 {
@@ -11,5 +12,16 @@ namespace Shared.Models
         public string Password { get; set; }
 
         public virtual string UserType { get; set; }
+
+        public User Copy()
+        {
+            return new User()
+            {
+                Id = Id,
+                Email = Email,
+                Password = Password,
+                UserType = UserType
+            };
+        }
     }
 }
