@@ -1,0 +1,87 @@
+﻿@using API.Models
+@using Client.Data
+@using Client.Data.Caches
+@using Client.Data.Companies
+@using Client.Data.CompanyOwners
+@using Client.Data.Users
+@using global::Shared.Models
+@using Microsoft.AspNetCore.Components
+@using Radzen
+
+@inject IProductService ProductService
+@inject NavigationManager NavigationManager
+@inject ICacheService CacheService
+@inject ICompanyOwnerService CompanyOwnerService
+
+<div class="col-md-6">
+    <RadzenTemplateForm TItem="Product" Data="newProduct" Submit=@Submit>
+        <RadzenFieldset Text="Nový produkt">
+            <div class="row">
+                <div class="col-md-4 align-items-center d-flex">
+                    <RadzenLabel Text="Meno"/>
+                </div>
+                <div class="col-md-8">
+                    <RadzenTextBox Class="w-100" style="width: 100%; display: block" @bind-Value="newProduct.Name" Name="Name"/>
+                    <RadzenRequiredValidator Component="Name" Text="Meno je povinné!" Style="position: absolute"/>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 align-items-center d-flex">
+                    <RadzenLabel Text="Cena v eur"/>
+                </div>
+                <div class="col-md-8">
+                    <RadzenNumeric Class="w-100" style="width: 100%; display: block" @bind-Value="newProduct.Price" Name="Price"/>
+                    <RadzenRequiredValidator Component="Price" Text="Cena je povinná" Style="position: absolute"/>
+                    <RadzenNumericRangeValidator Min="2" Max="100" Component="Price" Text="Cena musí byť najmenej 2 eurá!"></RadzenNumericRangeValidator>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 align-items-center d-flex">
+                    <RadzenLabel Text="Dĺžka v minútach"/>
+                </div>
+                <div class="col-md-8">
+                    <RadzenNumeric Class="w-100" style="width: 100%; display: block" @bind-Value="newProduct.ProcedureLengthInMinutes" Name="Length"/>
+                    <RadzenRequiredValidator Component="Length" Text="Dĺžka je povinná" Style="position: absolute"/>
+                    <RadzenNumericRangeValidator Min="5" Max="180" Component="Length" Text="Dĺžka musí byť najmenej 5 minút!"></RadzenNumericRangeValidator>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 align-items-center d-flex">
+                    <RadzenLabel Text="Popis"/>
+                </div>
+                <div class="col-md-8">
+                    <RadzenTextArea Class="w-100" style="width: 100%; display: block" @bind-Value="newProduct.Description" Name="Description"/>
+                    <RadzenRequiredValidator Component="Description" Text="Popis je povinný" Style="position: absolute"/>
+                </div>
+            </div>
+            
+            <div class="row justify-content-center">
+                <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Uložiť"/>
+            </div>
+        </RadzenFieldset>
+    </RadzenTemplateForm>
+</div>
+
+@code {
+    private Product newProduct = new ();
+
+    private async Task Submit()
+    {
+        try
+        {
+            var userAsync = await CacheService.GetUserAsync();
+            var companyByCompanyOwnerIdAsync = await CompanyOwnerService.GetCompanyByCompanyOwnerIdAsync(userAsync.Id);
+            newProduct.CompanyId = companyByCompanyOwnerIdAsync.Id;
+            await ProductService.CreateProductAsync(newProduct);
+            NavigationManager.NavigateTo("/products");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
+
+}
