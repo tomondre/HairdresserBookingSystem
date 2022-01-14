@@ -7,6 +7,7 @@ using Client.Data;
 using Client.Data.Appointments;
 using Client.Data.Authentication;
 using Client.Data.Caches;
+using Client.Data.Companies;
 using Client.Data.Customers;
 using Client.Data.Users;
 using Client.Data.WorkingDays;
@@ -50,6 +51,7 @@ namespace Client
             services.AddScoped<ICacheService, CacheService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<ICompanyService, CompanyService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
