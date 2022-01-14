@@ -17,7 +17,7 @@ namespace Client.Data.Companies
         public async Task<Company> GetCompanyByIdAsync(int id)
         {
             var httpResponseMessage = await client.GetAsync($"{Helper.url}/companies");
-            Helper.CheckException(httpResponseMessage);
+            await Helper.CheckException(httpResponseMessage);
             var readAsStringAsync = await httpResponseMessage.Content.ReadAsStringAsync();
             var deserialize = Helper.Deserialize<Company>(readAsStringAsync);
             return deserialize;

@@ -21,7 +21,7 @@ namespace Client.Data
         public async Task<ProductList> GetAllCompanyProducts(int id)
         {
             var httpResponseMessage = await client.GetAsync($"{Helper.url}/companies/{id}/products");
-            Helper.CheckException(httpResponseMessage);
+            await Helper.CheckException(httpResponseMessage);
             var readAsStringAsync = await httpResponseMessage.Content.ReadAsStringAsync();
             var deserialize = Helper.Deserialize<IList<Product>>(readAsStringAsync);
             return new ProductList
@@ -35,7 +35,7 @@ namespace Client.Data
             var serialize = Helper.Serialize(product);
             var stringContent = new StringContent(serialize, Encoding.UTF8, "application/json");
             var postAsync = await client.PostAsync($"{Helper.url}/products", stringContent);
-            Helper.CheckException(postAsync);
+            await Helper.CheckException(postAsync);
             var readAsStringAsync = await postAsync.Content.ReadAsStringAsync();
             var deserialize = Helper.Deserialize<Product>(readAsStringAsync);
             return deserialize;

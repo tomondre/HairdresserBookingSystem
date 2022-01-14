@@ -9,7 +9,7 @@ namespace Client.Data.Customers
     public class CustomerService : ICustomerService
     {
         private HttpClient client;
-        
+
         public CustomerService(HttpClient client)
         {
             this.client = client;
@@ -20,7 +20,7 @@ namespace Client.Data.Customers
             var serialize = Helper.Serialize(customer);
             var stringContent = new StringContent(serialize, Encoding.UTF8, "application/json");
             var postAsync = await client.PostAsync($"{Helper.url}/customers", stringContent);
-            Helper.CheckException(postAsync);
+            await Helper.CheckException(postAsync);
             var readAsStringAsync = await postAsync.Content.ReadAsStringAsync();
             var deserialize = Helper.Deserialize<Customer>(readAsStringAsync);
             return deserialize;

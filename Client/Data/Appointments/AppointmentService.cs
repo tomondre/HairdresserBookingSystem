@@ -20,7 +20,7 @@ namespace Client.Data.Appointments
             var serialize = Helper.Serialize(appointment);
             var content = new StringContent(serialize, Encoding.UTF8, "application/json");
             var post = await client.PostAsync($"{Helper.url}/Appointments", content);
-            Helper.CheckException(post);
+            await Helper.CheckException(post);
             var readAsStringAsync = await post.Content.ReadAsStringAsync();
             var deserialize = Helper.Deserialize<Appointment>(readAsStringAsync);
             return deserialize;

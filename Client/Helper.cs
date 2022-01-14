@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Client
@@ -11,11 +12,11 @@ namespace Client
     {
         public static string url  = "https://localhost:5003";
 
-        public static void CheckException(HttpResponseMessage response)
+        public static async Task CheckException(HttpResponseMessage response)
         {
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception(response.Content.ToString());
+                throw new Exception( await response.Content.ReadAsStringAsync());
             }
         }
 
