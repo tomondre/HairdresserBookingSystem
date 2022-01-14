@@ -8,31 +8,34 @@
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
 
     <ul class="nav flex-column">
+
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                 <span class="oi oi-home" aria-hidden="true"></span> Home
             </NavLink>
         </li>
-    </ul>
 
-    <AuthorizeView Policy="CompanyOwner">
-        <ul class="nav flex-column">
+        <AuthorizeView Policy="CompanyOwner">
             <li class="nav-item px-3">
                 <NavLink class="nav-link" href="product/add" Match="NavLinkMatch.Prefix">
                     <span class="oi oi-box" aria-hidden="true"></span>Add Product
                 </NavLink>
             </li>
-        </ul>
 
-        <ul class="nav flex-column">
             <li class="nav-item px-3">
                 <NavLink class="nav-link" href="products" Match="NavLinkMatch.Prefix">
                     <span class="oi oi-box" aria-hidden="true"></span>All Product
                 </NavLink>
             </li>
-        </ul>
 
-    </AuthorizeView>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="calendar" Match="NavLinkMatch.Prefix">
+                    <span class="oi oi-box" aria-hidden="true"></span>Kalendár
+                </NavLink>
+            </li>
+
+        </AuthorizeView>
+    </ul>
 
 </div>
 
