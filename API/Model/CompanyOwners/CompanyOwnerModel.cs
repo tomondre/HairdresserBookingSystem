@@ -17,5 +17,10 @@ namespace API.Model.CompanyOwners
         {
             return dao.CreateCompanyOwnerAsync(companyOwner);
         }
+
+        public Task<Company> GetCompanyByCompanyOwnerIdAsync(int id)
+        {
+            return dao.GetCompanyByCompanyOwnerIdAsync(id);
+        }
     }
 }

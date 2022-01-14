@@ -28,5 +28,18 @@ namespace API.Persistence.CompanyOwners
             await context.SaveChangesAsync();
             return entityEntry.Entity;
         }
+
+        public async Task<Company> GetCompanyByCompanyOwnerIdAsync(int id)
+        {
+            await using HairdresserDbContext context = new HairdresserDbContext();
+            var firstOrDefaultAsync = await context.CompanyOwners.Include(c => c.Company).FirstOrDefaultAsync();
+
+            if (firstOrDefaultAsync == null)
+            {
+                throw new Exception("Company Owner With the given id doesnt exist!");
+            }
+
+            return firstOrDefaultAsync.Company;
+        }
     }
 }

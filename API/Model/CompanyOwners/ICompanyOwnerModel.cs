@@ -6,5 +6,6 @@ namespace API.Model.CompanyOwners
     public interface ICompanyOwnerModel
     {
         Task<CompanyOwner> CreateCompanyOwnerAsync(CompanyOwner companyOwner);
+        Task<Company> GetCompanyByCompanyOwnerIdAsync(int id);
     }
 }

@@ -30,5 +30,20 @@ namespace API.Controllers
                 return StatusCode(403, e.Message);
             }
         }
+        
+        [HttpGet("{id:int}/company")]
+        public async Task<ActionResult<Company>> GetCompanyByCompanyOwnerId([FromRoute] int id)
+        {
+            try
+            {
+                var company = await model.GetCompanyByCompanyOwnerIdAsync(id);
+                return Ok(company);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(403, e.Message);
+            }
+        }
     }
 }
