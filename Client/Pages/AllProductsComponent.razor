@@ -25,7 +25,7 @@
     {
         try
         {
-            var openedCompanyAsync = await CacheService.GetOpenedCompanyAsync();
+            var openedCompanyAsync = await CacheService.GetLoggedInCompanyUserCompanyAsync();
             Products = await ProductService.GetAllCompanyProducts(openedCompanyAsync.Id);
             isLoading = false;
         }
