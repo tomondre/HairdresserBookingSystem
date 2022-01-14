@@ -1,0 +1,38 @@
+﻿@using API.Models
+@using Client.Data
+@using Client.Data.Users
+@using Client.Models
+@using global::Shared.Models
+@inject ICacheService CacheService
+@inject IProductService ProductService
+
+<RadzenDataGrid IsLoading="@isLoading" TItem="Product" Data="@Products.Products">
+    <Columns>
+        <RadzenDataGridColumn Title="Id" TItem="Product" Property="Id"></RadzenDataGridColumn>
+        <RadzenDataGridColumn Title="Meno" TItem="Product" Property="Name"></RadzenDataGridColumn>
+        <RadzenDataGridColumn Title="Popis" TItem="Product" Property="Description"></RadzenDataGridColumn>
+        <RadzenDataGridColumn Title="Cena" TItem="Product" Property="Price"></RadzenDataGridColumn>
+        <RadzenDataGridColumn Title="Dĺžka v minútach" TItem="Product" Property="ProcedureLengthInMinutes"></RadzenDataGridColumn>
+    </Columns>
+
+</RadzenDataGrid>
+
+@code {
+    private bool isLoading = true;
+    private ProductList Products = new ProductList();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var openedCompanyAsync = await CacheService.GetOpenedCompanyAsync();
+            Products = await ProductService.GetAllCompanyProducts(openedCompanyAsync.Id);
+            isLoading = false;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
+
+}
