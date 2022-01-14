@@ -72,8 +72,7 @@
     {
         try
         {
-            var userAsync = await CacheService.GetUserAsync();
-            var companyByCompanyOwnerIdAsync = await CompanyOwnerService.GetCompanyByCompanyOwnerIdAsync(userAsync.Id);
+            var companyByCompanyOwnerIdAsync = await CacheService.GetLoggedInCompanyUserCompanyAsync();
             newProduct.CompanyId = companyByCompanyOwnerIdAsync.Id;
             await ProductService.CreateProductAsync(newProduct);
             NavigationManager.NavigateTo("/products");
