@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using API.Models;
 
-namespace Client.Models
+namespace Shared.Models
 {
     public class ProductList
     {
@@ -11,6 +11,5 @@ namespace Client.Models
         {
             Products = new List<Product>();
         }
-
     }
 }
