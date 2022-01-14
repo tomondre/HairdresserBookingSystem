@@ -1,73 +1,72 @@
-﻿@using Client.Models
+﻿@page "/calendar"
+
+@using Client.Models
 @using Radzen
 @using API.Models
 @using Client.Data
+@using Client.Data.Caches
+@using Client.Data.Users
 @inject DialogService DialogService
 @inject IWorkingDayService _workingDayService
+@inject ICacheService CacheService
 
 @if (appointments == null)
 {
-  <em>Loading, please wait</em>
+    <em>Loading, please wait</em>
 }
 else
 {
-  <RadzenScheduler @ref=@scheduler Name="Scheduler" Data="@appointments" TItem="Appointment" StartProperty="Start" EndProperty="End" TextProperty="Text"
-                   SlotSelect=@OnSlotSelect AppointmentSelect=@OnAppointmentSelect AppointmentRender=@OnAppointmentRender
-                   Style="height: 768px">
-    <RadzenDayView/>
-    <RadzenWeekView/>
-    <RadzenMonthView/>
-  </RadzenScheduler>
+    <RadzenScheduler @ref=@scheduler Name="Scheduler" Data="@appointments" TItem="Appointment" StartProperty="Start" EndProperty="End" TextProperty="Text"
+                     SlotSelect=@OnSlotSelect AppointmentSelect=@OnAppointmentSelect AppointmentRender=@OnAppointmentRender
+                     Style="height: 768px">
+        <RadzenDayView/>
+        <RadzenWeekView/>
+        <RadzenMonthView/>
+    </RadzenScheduler>
 }
 
 
 
 @code {
-  RadzenScheduler<Appointment> scheduler;
-  
-  IList<Appointment> appointments;
-  
-  protected override async Task OnInitializedAsync()
-  {
-     appointments = (await _workingDayService.GetWorkingDayAsync(1)).Appointments;
-  }
+    RadzenScheduler<Appointment> scheduler;
 
-  public async Task OnSlotSelect(SchedulerSlotSelectEventArgs args)
-  {
+    IList<Appointment> appointments;
 
-    Appointment data = await DialogService.OpenAsync<AddAppointmentComponent>("Add Appointment",
-      new Dictionary<string, object> { { "Start", args.Start }});
-
-    if (data != null)
+    protected override async Task OnInitializedAsync()
     {
-      appointments.Add(data);
-      await scheduler.Reload();
+        var loggedInCompanyUserCompanyAsync = await CacheService.GetLoggedInCompanyUserCompanyAsync();
+        appointments = (await _workingDayService.GetWorkingDayAsync(loggedInCompanyUserCompanyAsync.Id)).Appointments;
     }
-  }
 
-  async Task OnAppointmentSelect(SchedulerAppointmentSelectEventArgs<Appointment> args)
-  {
-
-    await DialogService.OpenAsync<EditAppointmentPage>("Edit Appointment", new Dictionary<string, object> { { "model", args.Data } });
-
-    await scheduler.Reload();
-  }
-
-  void OnAppointmentRender(SchedulerAppointmentRenderEventArgs<Appointment> args)
-  {
-  // Never call StateHasChanged in AppointmentRender - would lead to infinite loop
-
-    if (args.Data.Text == "Otváracie hodiny")
+    public async Task OnSlotSelect(SchedulerSlotSelectEventArgs args)
     {
-      args.Attributes["style"] = "background: cyan";
-    }
-    else if (args.Data.Text == "Pánsky Strih")
+        await DialogService.OpenAsync<AddWorkingDayComponent>("Add Appointment",
+            new Dictionary<string, object> {{"Start", args.Start}});
+}
+
+    async Task OnAppointmentSelect(SchedulerAppointmentSelectEventArgs<Appointment> args)
     {
-      args.Attributes["style"] = "background: red";
+        await DialogService.OpenAsync<EditAppointmentPage>("Edit Appointment", new Dictionary<string, object> {{"model", args.Data}});
+
+        await scheduler.Reload();
     }
-    else
+
+    void OnAppointmentRender(SchedulerAppointmentRenderEventArgs<Appointment> args)
     {
-      args.Attributes["style"] = "background: grey";
+    // Never call StateHasChanged in AppointmentRender - would lead to infinite loop
+
+        if (args.Data.Text == "Otváracie hodiny")
+        {
+            args.Attributes["style"] = "background: cyan";
+        }
+        else if (args.Data.Text == "Pánsky Strih")
+        {
+            args.Attributes["style"] = "background: red";
+        }
+        else
+        {
+            args.Attributes["style"] = "background: grey";
+        }
     }
-  }
+
 }

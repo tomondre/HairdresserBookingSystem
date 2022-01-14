@@ -1,0 +1,109 @@
+﻿@using Radzen
+@using Microsoft.AspNetCore.Components
+@using Client.Models
+@using Client.Data
+@using Client.Data.Appointments
+@using Client.Data.Users
+@using global::Shared.Models
+
+@inject DialogService DialogService
+@inject IWorkingDayService WorkingDayService
+@inject ICacheService CacheService
+
+<RadzenTemplateForm TItem="WorkingDay" Data="@model" Submit=@OnSubmit>
+
+    <div class="row" style="margin-bottom: 16px">
+        <div class="col-md-3">
+            <RadzenLabel Text="Začiatok"/>
+        </div>
+        <div class="col">
+            <RadzenDatePicker @bind-Value="@model.Start" Name="Start" ShowTime="true"/>
+            <RadzenRequiredValidator Text="Start is required" Component="Start"/>
+        </div>
+    </div>
+    <div class="row" style="margin-bottom: 16px">
+        <div class="col-md-3">
+            <RadzenLabel Text="Koniec"/>
+        </div>
+        <div class="col">
+            <RadzenDatePicker Name="End" @bind-Value="@model.End" ShowTime="true"/>
+        </div>
+    </div>
+
+    <div class="row" style="margin-bottom: 16px">
+        <div class="col-md-3">
+            <RadzenLabel Text="Prestávka"/>
+        </div>
+        <div class="col">
+            <RadzenCheckBox @bind-Value="IsBreakTicked" Name="Prestávka"/>
+        </div>
+    </div>
+
+    @if (IsBreakTicked)
+    {
+        <div class="row" style="margin-bottom: 16px">
+            <div class="col-md-3">
+                <RadzenLabel Text="Začiatok prestávky"/>
+            </div>
+            <div class="col">
+                <RadzenDatePicker Name="BreakStart" @bind-Value="@model.StartBreak" ShowTime="true"/>
+            </div>
+        </div>
+
+        <div class="row" style="margin-bottom: 16px">
+            <div class="col-md-3">
+                <RadzenLabel Text="Dĺžka prestávky v minútach"/>
+            </div>
+
+            <div class="col">
+                <RadzenNumeric TValue="int" @bind-Value="model.BreakLengthInMinutes"/>
+            </div>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col">
+            <RadzenButton Disabled="@(Loading)" Style="@(Loading ? "cursor: \"wait;\"" : "")" ButtonType="ButtonType.Submit" Text="Save"/>
+        </div>
+    </div>
+</RadzenTemplateForm>
+
+@code {
+
+    [Parameter]
+    public DateTime Start { get; set; }
+
+    private bool IsBreakTicked = false;
+
+    private bool Loading = false;
+
+    private WorkingDay model = new();
+
+    protected override void OnParametersSet()
+    {
+        model.Start = Start;
+        model.End = Start.AddHours(8);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+    }
+
+    async Task OnSubmit(WorkingDay model)
+    {
+        Loading = true;
+        try
+        {
+            var loggedInCompanyUserCompanyAsync = await CacheService.GetLoggedInCompanyUserCompanyAsync();
+            model.Company.Id = loggedInCompanyUserCompanyAsync.Id;
+            await WorkingDayService.CreateWorkingDayAsync(model);
+        }
+        catch (Exception e)
+        {
+        }
+        DialogService.Close(model);
+    }
+
+
+}
