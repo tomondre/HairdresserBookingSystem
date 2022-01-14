@@ -15,10 +15,6 @@ namespace API.Model
             this.companyDao = companyDao;
         }
         
-        public Task<Company> CreateCompanyAsync(Company company)
-        {
-            return companyDao.CreateCompanyAsync(company);
-        }
 
         public Task<Company> GetCompanyByIdAsync(int id)
         {

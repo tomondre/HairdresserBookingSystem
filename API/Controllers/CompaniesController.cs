@@ -19,21 +19,6 @@ namespace API.Controllers
             this.model = model;
         }
 
-        [HttpPost]
-        public async Task<ActionResult<Company>> CreateCompanyAsync([FromBody] Company company)
-        {
-            try
-            {
-                var companyAsync = await model.CreateCompanyAsync(company);
-                return Ok(companyAsync);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return StatusCode(403, e.Message);
-            }
-        }
-
         [HttpGet]
         public async Task<ActionResult<IList<Company>>> GetAllCompanies([FromQuery] int? size, [FromQuery] int? page)
         {
