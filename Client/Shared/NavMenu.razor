@@ -1,4 +1,7 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
+﻿@using Client.Data.Authentication
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<div class="top-row pl-4 navbar navbar-dark">
     <a class="navbar-brand" href="">Client</a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
@@ -33,7 +36,26 @@
                     <span class="oi oi-box" aria-hidden="true"></span>Kalendár
                 </NavLink>
             </li>
+        </AuthorizeView>
+        <AuthorizeView Policy="Customer">
 
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="appointments/create" Match="NavLinkMatch.Prefix">
+                    <span class="oi oi-box" aria-hidden="true"></span>Objednať sa
+                </NavLink>
+            </li>
+        </AuthorizeView>
+
+        <AuthorizeView>
+            <Authorized>
+
+                <li class="nav-item px-3">
+                    <NavLink @onclick="Logout" class="nav-link" href="" Match="NavLinkMatch.Prefix">
+                        <span class="oi oi-box" aria-hidden="true"></span>Odhlásenie
+                    </NavLink>
+                </li>
+
+            </Authorized>
         </AuthorizeView>
     </ul>
 
@@ -47,6 +69,11 @@
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    private async Task Logout()
+    {
+        await ((CustomAuthenticationStateProvider) AuthenticationStateProvider).Logout();
     }
 
 }
