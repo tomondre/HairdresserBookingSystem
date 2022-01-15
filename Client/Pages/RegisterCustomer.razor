@@ -1,15 +1,39 @@
-﻿@using Microsoft.AspNetCore.Components
+﻿@page "/register"
+
+@using Microsoft.AspNetCore.Components
 @using Radzen
 @using Client.Data.Authentication
 @using Client.Data.Customers
 @using global::Shared.Models
 
 @inject ICustomerService CustomerService
-@inject AuthenticationStateProvider AuthenticationStateProvider 
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
 
 <div class="col-md-6">
-    <RadzenTemplateForm TItem="Customer" Data="newCustomer" Submit=@Submit >
+    <RadzenTemplateForm TItem="Customer" Data="newCustomer" Submit=@Submit>
         <RadzenFieldset Text="Registrácia">
+
+            <div class="row">
+                <div class="col-md-4 align-items-center d-flex">
+                    <RadzenLabel Text="Meno"/>
+                </div>
+                <div class="col-md-8">
+                    <RadzenTextBox style="width: 100%;" @bind-Value="newCustomer.FirstName" Name="FirstName"/>
+                    <RadzenRequiredValidator Component="FirstName" Text="Meno je povinné!"></RadzenRequiredValidator>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 align-items-center d-flex">
+                    <RadzenLabel Text="Priezvisko"/>
+                </div>
+                <div class="col-md-8">
+                    <RadzenTextBox style="width: 100%;" @bind-Value="newCustomer.LastName" Name="LastName"/>
+                    <RadzenRequiredValidator Component="LastName" Text="Priezvisko je povinné"></RadzenRequiredValidator>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-md-4 align-items-center d-flex">
                     <RadzenLabel Text="Email"/>
@@ -28,38 +52,20 @@
                     <RadzenPassword style="width: 100%;" @bind-Value="newCustomer.Password" Name="Password"/>
                     @* <RadzenRegexValidator Pattern="" Component="Password" Text="Heslo musí obsahovať: jedno veľké písmeno, jedno malé písmeno a číslo."></RadzenRegexValidator> *@
                     <RadzenRequiredValidator Component="Password" Text="Heslo je povinné!"></RadzenRequiredValidator>
-                    </div>
-            </div>
-            
-            <div class="row">
-                <div class="col-md-4 align-items-center d-flex">
-                    <RadzenLabel Text="Meno"/>
-                </div>
-                <div class="col-md-8">
-                    <RadzenTextBox style="width: 100%;" @bind-Value="newCustomer.FirstName" Name="FirstName"/>
-                    <RadzenRequiredValidator Component="FirstName" Text="Meno je povinné!"></RadzenRequiredValidator>
-                    </div>
-            </div>
-            
-            <div class="row">
-                <div class="col-md-4 align-items-center d-flex">
-                    <RadzenLabel Text="Priezvisko"/>
-                </div>
-                <div class="col-md-8">
-                    <RadzenTextBox style="width: 100%;" @bind-Value="newCustomer.LastName" Name="LastName"/>
-                    <RadzenRequiredValidator Component="LastName" Text="Priezvisko je povinné"></RadzenRequiredValidator>
                 </div>
             </div>
-            
+
             <div class="row justify-content-center">
                 <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Uložiť"/>
             </div>
+            <em>@SubmitFeedback</em>
         </RadzenFieldset>
     </RadzenTemplateForm>
 </div>
 
 @code {
     private Customer newCustomer = new Customer();
+    private string SubmitFeedback = "";
 
     public async Task Submit()
     {
@@ -69,10 +75,12 @@
             customer.Password = Helper.Hash(newCustomer.Password);
             var customerAsync = await CustomerService.CreateCustomerAsync(newCustomer);
             await ((CustomAuthenticationStateProvider) AuthenticationStateProvider).ValidateUser(customerAsync);
+            NavigationManager.NavigateTo("/");
         }
         catch (Exception e)
         {
             Console.Write(e.Message);
+            SubmitFeedback = e.Message;
         }
     }
 
