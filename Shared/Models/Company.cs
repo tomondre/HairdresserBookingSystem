@@ -10,11 +10,13 @@ namespace Shared.Models
         public int Id { get; set; }
         
         public string Name { get; set; }
-        
+        public bool IsApproved { get; set; }
+
         public IList<Product> Products { get; set; }
         
         public Company()
         {
+            Products = new List<Product>();
         }
     }
 }
