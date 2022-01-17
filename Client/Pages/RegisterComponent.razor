@@ -1,0 +1,41 @@
+﻿@page "/register"
+
+@using Microsoft.AspNetCore.Components
+@using Radzen
+@using Client.Data.Authentication
+@using Client.Data.Customers
+@using global::Shared.Models
+
+@inject ICustomerService CustomerService
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+
+<div class="col-md-6">
+    <div class="row">
+        <div class="col-md-4 align-items-center d-flex">
+            <RadzenLabel Text="Chcem sa zaregistrovať ako firma:"/>
+        </div>
+        <div class="col-md-8">
+            <RadzenCheckBox TValue="bool" @bind-Value=@IsRegisterCompany Name="RegisterCompany"/>
+        </div>
+    </div>
+
+    @if (IsRegisterCompany)
+    {
+        <RegisterCompany/>
+    }
+    else
+    {
+        <RegisterCustomer/>
+    }
+</div>
+
+@code {
+    private bool IsRegisterCompany = false;
+}
+
+<style>
+    form .row {
+        margin-bottom: 25px;
+    }
+</style>

@@ -1,71 +1,67 @@
-﻿@page "/register"
-
-@using Microsoft.AspNetCore.Components
+﻿@using Microsoft.AspNetCore.Components
 @using Radzen
-@using Client.Data.Authentication
 @using Client.Data.Customers
+@using Client.Data.Authentication
 @using global::Shared.Models
 
 @inject ICustomerService CustomerService
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
 
-<div class="col-md-6">
-    <RadzenTemplateForm TItem="Customer" Data="newCustomer" Submit=@Submit>
-        <RadzenFieldset Text="Registrácia">
+<RadzenTemplateForm TItem="Customer" Data="newCustomer" Submit=@Submit>
+    <RadzenFieldset Text="Registrácia">
 
-            <div class="row">
-                <div class="col-md-4 align-items-center d-flex">
-                    <RadzenLabel Text="Meno"/>
-                </div>
-                <div class="col-md-8">
-                    <RadzenTextBox style="width: 100%;" @bind-Value="newCustomer.FirstName" Name="FirstName"/>
-                    <RadzenRequiredValidator Component="FirstName" Text="Meno je povinné!"></RadzenRequiredValidator>
-                </div>
+        <div class="row">
+            <div class="col-md-4 align-items-center d-flex">
+                <RadzenLabel Text="Meno"/>
             </div>
+            <div class="col-md-8">
+                <RadzenTextBox style="width: 100%;" @bind-Value="newCustomer.FirstName" Name="FirstName"/>
+                <RadzenRequiredValidator Component="FirstName" Text="Meno je povinné!"></RadzenRequiredValidator>
+            </div>
+        </div>
 
-            <div class="row">
-                <div class="col-md-4 align-items-center d-flex">
-                    <RadzenLabel Text="Priezvisko"/>
-                </div>
-                <div class="col-md-8">
-                    <RadzenTextBox style="width: 100%;" @bind-Value="newCustomer.LastName" Name="LastName"/>
-                    <RadzenRequiredValidator Component="LastName" Text="Priezvisko je povinné"></RadzenRequiredValidator>
-                </div>
+        <div class="row">
+            <div class="col-md-4 align-items-center d-flex">
+                <RadzenLabel Text="Priezvisko"/>
             </div>
+            <div class="col-md-8">
+                <RadzenTextBox style="width: 100%;" @bind-Value="newCustomer.LastName" Name="LastName"/>
+                <RadzenRequiredValidator Component="LastName" Text="Priezvisko je povinné"></RadzenRequiredValidator>
+            </div>
+        </div>
 
-            <div class="row">
-                <div class="col-md-4 align-items-center d-flex">
-                    <RadzenLabel Text="Email"/>
-                </div>
-                <div class="col-md-8">
-                    <RadzenTextBox Class="w-100" style="width: 100%; display: block" @bind-Value="newCustomer.Email" Name="Email"/>
-                    <RadzenRequiredValidator Component="Email" Text="Email je povinný" Style="position: absolute"/>
-                    <RadzenEmailValidator Component="Email" Text="Email je neplatný" Style="position: absolute"/>
-                </div>
+        <div class="row">
+            <div class="col-md-4 align-items-center d-flex">
+                <RadzenLabel Text="Email"/>
             </div>
-            <div class="row">
-                <div class="col-md-4 align-items-center d-flex">
-                    <RadzenLabel Text="Password"/>
-                </div>
-                <div class="col-md-8">
-                    <RadzenPassword style="width: 100%;" @bind-Value="newCustomer.Password" Name="Password"/>
-                    @* <RadzenRegexValidator Pattern="" Component="Password" Text="Heslo musí obsahovať: jedno veľké písmeno, jedno malé písmeno a číslo."></RadzenRegexValidator> *@
-                    <RadzenRequiredValidator Component="Password" Text="Heslo je povinné!"></RadzenRequiredValidator>
-                </div>
+            <div class="col-md-8">
+                <RadzenTextBox Class="w-100" style="width: 100%; display: block" @bind-Value="newCustomer.Email" Name="Email"/>
+                <RadzenRequiredValidator Component="Email" Text="Email je povinný" Style="position: absolute"/>
+                <RadzenEmailValidator Component="Email" Text="Email je neplatný" Style="position: absolute"/>
             </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 align-items-center d-flex">
+                <RadzenLabel Text="Password"/>
+            </div>
+            <div class="col-md-8">
+                <RadzenPassword style="width: 100%;" @bind-Value="newCustomer.Password" Name="Password"/>
+                @* <RadzenRegexValidator Pattern="" Component="Password" Text="Heslo musí obsahovať: jedno veľké písmeno, jedno malé písmeno a číslo."></RadzenRegexValidator> *@
+                <RadzenRequiredValidator Component="Password" Text="Heslo je povinné!"></RadzenRequiredValidator>
+            </div>
+        </div>
 
-            <div class="row justify-content-center">
-                <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Uložiť"/>
-            </div>
-            <em>@SubmitFeedback</em>
-        </RadzenFieldset>
-    </RadzenTemplateForm>
-</div>
+        <div class="row justify-content-center">
+            <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Uložiť"/>
+        </div>
+        <em>@SubmitFeedback</em>
+    </RadzenFieldset>
+</RadzenTemplateForm>
 
 @code {
-    private Customer newCustomer = new Customer();
     private string SubmitFeedback = "";
+    private Customer newCustomer = new Customer();
 
     public async Task Submit()
     {
@@ -83,11 +79,4 @@
             SubmitFeedback = e.Message;
         }
     }
-
 }
-
-<style>
-    form .row {
-        margin-bottom: 25px;
-    }
-</style>
