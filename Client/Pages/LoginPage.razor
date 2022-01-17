@@ -9,22 +9,23 @@
     <RadzenCard>
         <h2 class="mb-4">Prihlásenie</h2>
         <RadzenTemplateForm Data=@("LoginWithRegisterAndReset")>
-            <RadzenLogin Login=@(args => OnLogin(args, "Prihlásenie")) 
+            <RadzenLogin Login=@(args => OnLogin(args, "Prihlásenie"))
                          ResetPassword=@(args => OnResetPassword(args, "Login with register and password reset"))
-                         Register=@(args => OnRegister("Login with register and password reset")) 
+                         Register=@(args => OnRegister("Login with register and password reset"))
                          LoginText="Prihlásiť" UserText="Email" PasswordText="Heslo"
                          UserRequired="Email je povinný"
                          PasswordRequired="Heslo je povinné"
                          RegisterText="Zaregistrovať sa"
                          RegisterMessageText="Nemáš ešte účet?"
-                         ResetPasswordText="Zabudol som heslo."
-                         />
-            </RadzenTemplateForm>
+                         ResetPasswordText="Zabudol som heslo."/>
+        </RadzenTemplateForm>
+        <em>@SubmitFeedback</em>
     </RadzenCard>
 </div>
 
 
 @code {
+    private string SubmitFeedback = "";
 
     async Task OnLogin(LoginArgs args, string name)
     {
@@ -37,15 +38,14 @@
         {
             await ((CustomAuthenticationStateProvider) AuthenticationStateProvider).ValidateUser(user);
             NavigationManager.NavigateTo("/");
-            
         }
         catch (Exception e)
         {
-            //TODO display error handling
+            SubmitFeedback = e.Message;
             Console.WriteLine(e);
         }
     }
-    
+
     void OnRegister(string name)
     {
         NavigationManager.NavigateTo("/register");
@@ -53,6 +53,7 @@
 
     void OnResetPassword(string value, string name)
     {
-        // console.Log($"{name} -> ResetPassword for user: {value}");
+    // console.Log($"{name} -> ResetPassword for user: {value}");
     }
+
 }
