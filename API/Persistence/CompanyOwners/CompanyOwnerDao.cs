@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using API.DataAccess;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
 using Shared.Models;
 
@@ -32,14 +34,19 @@ namespace API.Persistence.CompanyOwners
         public async Task<Company> GetCompanyByCompanyOwnerIdAsync(int id)
         {
             await using HairdresserDbContext context = new HairdresserDbContext();
-            var firstOrDefaultAsync = await context.CompanyOwners.Include(c => c.Company).FirstOrDefaultAsync();
+            var query = 
+                from owner in context.CompanyOwners
+                join company in context.Companies on owner.Company.Id equals company.Id 
+                where owner.Id == id 
+                select new {company};
 
-            if (firstOrDefaultAsync == null)
+            var item = query.ToList().FirstOrDefault();
+            if (item != null && item.company == null)
             {
                 throw new Exception("Company Owner With the given id doesnt exist!");
             }
 
-            return firstOrDefaultAsync.Company;
+            return item.company;
         }
     }
 }
