@@ -28,6 +28,16 @@ namespace Client
             });
             return deserialize;
         }
+        
+        public static async Task<T> Deserialize<T>(HttpResponseMessage message)
+        {
+            var s = await message.Content.ReadAsStringAsync();
+            var deserialize = JsonSerializer.Deserialize<T>(s, new JsonSerializerOptions()
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            });
+            return deserialize;
+        }
 
         public static string Serialize(object o)
         {

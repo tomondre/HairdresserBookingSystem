@@ -63,5 +63,18 @@ namespace API.Persistence.WorkingDays
                 Days = await days.ToListAsync()
             };
         }
+
+        public async Task<WorkingDay> DeleteWorkingDayAsync(int id)
+        {
+            await using HairdresserDbContext context = new HairdresserDbContext();
+            var firstOrDefaultAsync = await context.WorkingDays.Where(w => w.Id == id).FirstOrDefaultAsync();
+            if (firstOrDefaultAsync == null)
+            {
+                throw new Exception("Working day with the given ID doesn't exist!");
+            }
+            var entityEntry = context.WorkingDays.Remove(firstOrDefaultAsync);
+            await context.SaveChangesAsync();
+            return entityEntry.Entity;
+        }
     }
 }

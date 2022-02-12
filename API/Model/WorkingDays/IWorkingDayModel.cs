@@ -8,5 +8,6 @@ namespace API.Model.WorkingDays
     {
         Task<WorkingDay> CreateWorkingDayAsync(WorkingDay workingDay);
         Task<WorkingDayList> GetAllCompanyWorkingDaysAsync(int id);
+        Task<WorkingDay> DeleteWorkingDayAsync(int id);
     }
 }

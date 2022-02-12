@@ -46,7 +46,7 @@
                     <RadzenLabel Text="Začiatok prestávky"/>
                 </div>
                 <div class="col">
-                    <RadzenDatePicker Name="BreakStart" @bind-Value="@model.StartBreak" ShowTime="true"/>
+                    <RadzenDatePicker Change="BreakTimeChanged" TValue="DateTime?" TimeOnly="true" DateFormat="HH:mm" Name="BreakStart" ShowTime="true"/>
                 </div>
             </div>
 
@@ -72,20 +72,19 @@
 
 @code {
 
-    [Parameter]
-    public DateTime Start { get; set; }
-
     private bool IsBreakTicked = false;
 
     private bool Loading = false;
 
+    private DateTime BreakStart;
+
     private WorkingDay model = new();
-    
 
     protected override async Task OnInitializedAsync()
     {
         model.Start = DateTime.Now.AddDays(1);
         model.End = model.Start.AddHours(8);
+        BreakStart = model.Start.AddHours(4);
     }
 
     async Task OnSubmit(WorkingDay model)
@@ -95,17 +94,27 @@
         {
             if (!IsBreakTicked)
             {
-                model.StartBreak = Start;
+                model.StartBreak = DateTime.MinValue;
                 model.BreakLengthInMinutes = 0;
             }
             var loggedInCompanyUserCompanyAsync = await CacheService.GetLoggedInCompanyUserCompanyAsync();
             model.Company.Id = loggedInCompanyUserCompanyAsync.Id;
             await WorkingDayService.CreateWorkingDayAsync(model);
             Loading = false;
-            NavigationManager.NavigateTo("/workingdays");
+            NavigationManager.NavigateTo("/workingdays", true);
         }
         catch (Exception e)
         {
+        }
+    }
+
+    private void BreakTimeChanged(DateTime? args)
+    {
+        if (args.HasValue)
+        {
+            var s = model.Start;
+            var a = args.Value;
+            model.StartBreak = new DateTime(s.Year, s.Month, s.Day, a.Hour, a.Minute, a.Millisecond);
         }
     }
 }

@@ -34,6 +34,21 @@ namespace API.Controllers
             }
         }
 
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<WorkingDay>> DeleteWorkingDayAsync([FromRoute] int id)
+        {
+            try
+            {
+                var deleteWorkingDayAsync = await model.DeleteWorkingDayAsync(id);
+                return Ok(deleteWorkingDayAsync);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(403, e.Message);
+            }            
+        }
+
         [HttpGet("/companies/{id:int}/workingdays")]
         public async Task<ActionResult<WorkingDayList>> GetAllCompanyWorkingDaysAsync([FromRoute] int id)
         {

@@ -1,0 +1,59 @@
+﻿@using Client.Models
+@using Client.Data
+@using Client.Data.Users
+@using Radzen
+@inject IWorkingDayService WorkingDayService
+@inject ICacheService CacheService
+@inject DialogService DialogService
+
+<RadzenDataGrid @ref="Grid" TItem="WorkingDay" IsLoading="isLoading" Data="@WorkingDays">
+    <Columns>
+        <RadzenDataGridColumn TItem="WorkingDay" Property="Start" Title="Začiatok"/>
+        <RadzenDataGridColumn TItem="WorkingDay" Property="End" Title="Koniec"/>
+        <RadzenDataGridColumn TItem="WorkingDay" Property="StartBreak" Title="Začiatok Prestávky"/>
+        <RadzenDataGridColumn TItem="WorkingDay" Property="BreakLengthInMinutes" Title="Dĺžka prestávky"/>
+        <RadzenDataGridColumn TItem="WorkingDay" Context="WorkingDay" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="60px">
+            <Template Context="workingDay">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Small" Class="m-1" Click="@(args => DeleteRow(workingDay))" @onclick:stopPropagation="true">
+                </RadzenButton>
+            </Template>
+            @* <EditTemplate Context="workingDay"> *@
+            @*     <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Small" Class="m-1" Click="@(args => DeleteRow(workingDay))"> *@
+            @*     </RadzenButton> *@
+            @* </EditTemplate> *@
+        </RadzenDataGridColumn>
+    </Columns>
+</RadzenDataGrid>
+
+@code {
+    private RadzenDataGrid<WorkingDay> Grid;
+    private IList<WorkingDay> WorkingDays;
+    private Boolean isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var loggedInCompanyUserCompanyAsync = await CacheService.GetLoggedInCompanyUserCompanyAsync();
+        var workingDayListAsync = await WorkingDayService.GetWorkingDayListAsync(loggedInCompanyUserCompanyAsync.Id);
+        WorkingDays = workingDayListAsync.Days;
+        isLoading = false;
+    }
+
+    private async Task DeleteRow(WorkingDay workingDay)
+    {
+        try
+        {
+            var confirm = await DialogService.Confirm($"Naozaj chcete vymazať pracovný deň {workingDay.Start.ToString("ddd, dd MMM yyy")} a všetky jeho objednané časy?");
+            if (confirm.HasValue && confirm.Value)
+            {
+                await WorkingDayService.DeleteWorkingDay(workingDay.Id);
+            }
+            WorkingDays.Remove(workingDay);
+            await Grid.Reload();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
+
+}
