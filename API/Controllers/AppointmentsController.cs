@@ -47,5 +47,20 @@ namespace API.Controllers
             }
         }
 
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<Appointment>> DeleteAppointmentAsync([FromRoute] int id)
+        {
+            try
+            {
+                var deleteAppointmentAsync = await model.DeleteAppointmentAsync(id);
+                return Ok(deleteAppointmentAsync);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(403, e.Message);
+            }
+        }
+
     }
 }

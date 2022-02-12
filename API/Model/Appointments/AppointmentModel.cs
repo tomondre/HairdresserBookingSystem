@@ -22,5 +22,10 @@ namespace API.Model.Appointments
         {
             return dao.GetAllCompanyAppointmentsAsync(id);
         }
+
+        public Task<Appointment> DeleteAppointmentAsync(int id)
+        {
+            return dao.DeleteAppointmentAsync(id);
+        }
     }
 }

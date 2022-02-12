@@ -7,5 +7,6 @@ namespace API.Model.Appointments
     {
         Task<Appointment> CreateAppointmentAsync(Appointment appointment2);
         Task<AppointmentList> GetAllCompanyAppointmentsAsync(int id);
+        Task<Appointment> DeleteAppointmentAsync(int id);
     }
 }

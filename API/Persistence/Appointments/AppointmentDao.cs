@@ -70,5 +70,20 @@ namespace API.Persistence.Appointments
                 Appointments = await appointments.OrderByDescending(a => a.Start).ToListAsync()
             };
         }
+
+        public async Task<Appointment> DeleteAppointmentAsync(int id)
+        {
+            await using HairdresserDbContext context = new HairdresserDbContext();
+
+            var firstOrDefaultAsync = await context.Appointments.Where(a => a.Id == id).FirstOrDefaultAsync();
+            if (firstOrDefaultAsync == null)
+            {
+                throw new Exception("Appointment with the given ID doesn't exist!");
+            }
+
+            var entityEntry = context.Remove(firstOrDefaultAsync);
+            await context.SaveChangesAsync();
+            return entityEntry.Entity;
+        }
     }
 }

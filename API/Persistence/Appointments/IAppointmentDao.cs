@@ -7,5 +7,6 @@ namespace API.Persistence.Appointments
     {
         Task<Appointment> CreateAppointmentAsync(Appointment appointment);
         Task<AppointmentList> GetAllCompanyAppointmentsAsync(int id);
+        Task<Appointment> DeleteAppointmentAsync(int id);
     }
 }
