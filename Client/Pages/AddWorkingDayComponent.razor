@@ -96,7 +96,7 @@
                 model.StartBreak = DateTime.MinValue;
                 model.BreakLengthInMinutes = 0;
             }
-            var loggedInCompanyUserCompanyAsync = await CacheService.GetLoggedInCompanyUserCompanyAsync();
+            var loggedInCompanyUserCompanyAsync = await CacheService.GetLoggedInUserCompanyAsync();
             model.Company.Id = loggedInCompanyUserCompanyAsync.Id;
             await WorkingDayService.CreateWorkingDayAsync(model);
             Loading = false;

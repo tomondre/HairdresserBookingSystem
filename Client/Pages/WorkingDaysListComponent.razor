@@ -67,7 +67,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var loggedInCompanyUserCompanyAsync = await CacheService.GetLoggedInCompanyUserCompanyAsync();
+        var loggedInCompanyUserCompanyAsync = await CacheService.GetLoggedInUserCompanyAsync();
         var workingDayListAsync = await WorkingDayService.GetWorkingDayListAsync(loggedInCompanyUserCompanyAsync.Id);
         WorkingDays = workingDayListAsync.Days;
         isLoading = false;

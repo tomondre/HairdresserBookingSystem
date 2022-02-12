@@ -34,7 +34,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        var loggedInCompanyUserCompanyAsync = await CacheService.GetLoggedInCompanyUserCompanyAsync();
+        var loggedInCompanyUserCompanyAsync = await CacheService.GetLoggedInUserCompanyAsync();
         var workingDayList = await _workingDayService.GetWorkingDayListAsync(loggedInCompanyUserCompanyAsync.Id);
         appointments = workingDayList.Appointments;
     }

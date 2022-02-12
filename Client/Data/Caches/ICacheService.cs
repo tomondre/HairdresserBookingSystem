@@ -9,6 +9,6 @@ namespace Client.Data.Users
         Task<User> GetUserAsync();
         Task<Company> GetOpenedCompanyAsync();
         Task SaveUserAsync(User user);
-        Task<Company> GetLoggedInCompanyUserCompanyAsync();
+        Task<Company> GetLoggedInUserCompanyAsync();
     }
 }

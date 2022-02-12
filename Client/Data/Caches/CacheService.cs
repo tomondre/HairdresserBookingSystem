@@ -38,7 +38,7 @@ namespace Client.Data.Caches
             await sessionStorage.SetAsync("currentUser", user);
         }
 
-        public async Task<Company> GetLoggedInCompanyUserCompanyAsync()
+        public async Task<Company> GetLoggedInUserCompanyAsync()
         {
             var protectedBrowserStorageResult = await sessionStorage.GetAsync<Company>("loggedInCompany");
             if (!protectedBrowserStorageResult.Success)

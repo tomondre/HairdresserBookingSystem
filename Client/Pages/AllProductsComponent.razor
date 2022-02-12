@@ -25,7 +25,7 @@
     {
         try
         {
-            var openedCompanyAsync = await CacheService.GetLoggedInCompanyUserCompanyAsync();
+            var openedCompanyAsync = await CacheService.GetLoggedInUserCompanyAsync();
             Products = await ProductService.GetAllCompanyProducts(openedCompanyAsync.Id);
         }
         catch (Exception e)
