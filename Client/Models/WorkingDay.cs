@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.Xml;
 using API.Models;
 using Shared.Models;
 
@@ -14,13 +15,13 @@ namespace Client.Models
         public Company Company { get; set; }
         public int BreakLengthInMinutes { get; set; }
 
-        private IList<Appointment> _appointments;
+        private IList<Appointment> Appointments { get; set; }
 
-        public IList<Appointment> Appointments
+        public IList<Appointment> AppointmentsIncludingWorkingDay
         {
             get
             {
-                var result = new List<Appointment>(_appointments);
+                var result = new List<Appointment>(Appointments);
                 result.Add(new WorkSchedule()
                 {
                     Start = Start,
@@ -29,7 +30,6 @@ namespace Client.Models
                 });
                 return result;
             }
-            set => _appointments = value;
         }
 
         public DateTime EndBreak => StartBreak.AddMinutes(BreakLengthInMinutes);

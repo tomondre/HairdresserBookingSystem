@@ -17,7 +17,7 @@
 else
 {
     <RadzenScheduler @ref=@scheduler Name="Scheduler" Data="@appointments" TItem="Appointment" StartProperty="Start" EndProperty="End" TextProperty="Text"
-                     SlotSelect=@OnSlotSelect AppointmentSelect=@OnAppointmentSelect AppointmentRender=@OnAppointmentRender
+                     AppointmentRender=@OnAppointmentRender
                      Style="height: 768px">
         <RadzenDayView/>
         <RadzenWeekView/>
@@ -38,20 +38,7 @@ else
         var workingDayList = await _workingDayService.GetWorkingDayAsync(loggedInCompanyUserCompanyAsync.Id);
         appointments = workingDayList.Appointments;
     }
-
-    public async Task OnSlotSelect(SchedulerSlotSelectEventArgs args)
-    {
-        await DialogService.OpenAsync<AddWorkingDayComponent>("Add Appointment",
-            new Dictionary<string, object> {{"Start", args.Start}});
-}
-
-    async Task OnAppointmentSelect(SchedulerAppointmentSelectEventArgs<Appointment> args)
-    {
-        await DialogService.OpenAsync<EditAppointmentPage>("Edit Appointment", new Dictionary<string, object> {{"model", args.Data}});
-
-        await scheduler.Reload();
-    }
-
+    
     void OnAppointmentRender(SchedulerAppointmentRenderEventArgs<Appointment> args)
     {
     // Never call StateHasChanged in AppointmentRender - would lead to infinite loop

@@ -19,7 +19,7 @@ namespace Client.Models
                 List<Appointment> appointments = new List<Appointment>();
                 foreach (var day in Days)
                 {
-                    appointments.AddRange(day.Appointments);
+                    appointments.AddRange(day.AppointmentsIncludingWorkingDay);
                 }
 
                 return appointments;

@@ -6,67 +6,68 @@
 @using Client.Data.Users
 @using global::Shared.Models
 
-@inject DialogService DialogService
 @inject IWorkingDayService WorkingDayService
 @inject ICacheService CacheService
+@inject NavigationManager NavigationManager
 
 <RadzenTemplateForm TItem="WorkingDay" Data="@model" Submit=@OnSubmit>
-
-    <div class="row" style="margin-bottom: 16px">
-        <div class="col-md-3">
-            <RadzenLabel Text="Začiatok"/>
-        </div>
-        <div class="col">
-            <RadzenDatePicker @bind-Value="@model.Start" Name="Start" ShowTime="true"/>
-            <RadzenRequiredValidator Text="Start is required" Component="Start"/>
-        </div>
-    </div>
-    <div class="row" style="margin-bottom: 16px">
-        <div class="col-md-3">
-            <RadzenLabel Text="Koniec"/>
-        </div>
-        <div class="col">
-            <RadzenDatePicker Name="End" @bind-Value="@model.End" ShowTime="true"/>
-        </div>
-    </div>
-
-    <div class="row" style="margin-bottom: 16px">
-        <div class="col-md-3">
-            <RadzenLabel Text="Prestávka"/>
-        </div>
-        <div class="col">
-            <RadzenCheckBox @bind-Value="IsBreakTicked" Name="Prestávka"/>
-        </div>
-    </div>
-
-    @if (IsBreakTicked)
-    {
+    <RadzenFieldset Text="Pridať pracovný deň">
         <div class="row" style="margin-bottom: 16px">
             <div class="col-md-3">
-                <RadzenLabel Text="Začiatok prestávky"/>
+                <RadzenLabel Text="Začiatok"/>
             </div>
             <div class="col">
-                <RadzenDatePicker Name="BreakStart" @bind-Value="@model.StartBreak" ShowTime="true"/>
+                <RadzenDatePicker @bind-Value="@model.Start" Name="Start" ShowTime="true"/>
+                <RadzenRequiredValidator Text="Start is required" Component="Start"/>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 16px">
+            <div class="col-md-3">
+                <RadzenLabel Text="Koniec"/>
+            </div>
+            <div class="col">
+                <RadzenDatePicker Name="End" @bind-Value="@model.End" ShowTime="true"/>
             </div>
         </div>
 
         <div class="row" style="margin-bottom: 16px">
             <div class="col-md-3">
-                <RadzenLabel Text="Dĺžka prestávky v minútach"/>
+                <RadzenLabel Text="Prestávka"/>
             </div>
-
             <div class="col">
-                <RadzenNumeric TValue="int" @bind-Value="model.BreakLengthInMinutes"/>
+                <RadzenCheckBox @bind-Value="IsBreakTicked" Name="Prestávka"/>
             </div>
         </div>
-    }
 
-    <div class="row">
-        <div class="col-md-3"></div>
-        <div class="col">
-            <RadzenButton Disabled="@(Loading)" Style="@(Loading ? "cursor: \"wait;\"" : "")" ButtonType="ButtonType.Submit" Text="Save"/>
+        @if (IsBreakTicked)
+        {
+            <div class="row" style="margin-bottom: 16px">
+                <div class="col-md-3">
+                    <RadzenLabel Text="Začiatok prestávky"/>
+                </div>
+                <div class="col">
+                    <RadzenDatePicker Name="BreakStart" @bind-Value="@model.StartBreak" ShowTime="true"/>
+                </div>
+            </div>
+
+            <div class="row" style="margin-bottom: 16px">
+                <div class="col-md-3">
+                    <RadzenLabel Text="Dĺžka prestávky v minútach"/>
+                </div>
+
+                <div class="col">
+                    <RadzenNumeric TValue="int" @bind-Value="model.BreakLengthInMinutes"/>
+                </div>
+            </div>
+        }
+
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col">
+                <RadzenButton Disabled="@(Loading)" Style="@(Loading ? "cursor: \"wait;\"" : "")" ButtonType="ButtonType.Submit" Text="Save"/>
+            </div>
         </div>
-    </div>
+    </RadzenFieldset>
 </RadzenTemplateForm>
 
 @code {
@@ -79,15 +80,12 @@
     private bool Loading = false;
 
     private WorkingDay model = new();
-
-    protected override void OnParametersSet()
-    {
-        model.Start = Start;
-        model.End = Start.AddHours(8);
-    }
+    
 
     protected override async Task OnInitializedAsync()
     {
+        model.Start = DateTime.Now.AddDays(1);
+        model.End = model.Start.AddHours(8);
     }
 
     async Task OnSubmit(WorkingDay model)
@@ -95,15 +93,19 @@
         Loading = true;
         try
         {
+            if (!IsBreakTicked)
+            {
+                model.StartBreak = Start;
+                model.BreakLengthInMinutes = 0;
+            }
             var loggedInCompanyUserCompanyAsync = await CacheService.GetLoggedInCompanyUserCompanyAsync();
             model.Company.Id = loggedInCompanyUserCompanyAsync.Id;
             await WorkingDayService.CreateWorkingDayAsync(model);
+            Loading = false;
+            NavigationManager.NavigateTo("/workingdays");
         }
         catch (Exception e)
         {
         }
-        DialogService.Close(model);
     }
-
-
 }

@@ -21,7 +21,7 @@ namespace API.Persistence.WorkingDays
             }
 
             workingDay.Company = firstOrDefaultAsync;
-            var entityEntry = context.WorkingDays.Add(workingDay);
+            var entityEntry = await context.WorkingDays.AddAsync(workingDay);
             await context.SaveChangesAsync();
             return entityEntry.Entity;
         }
