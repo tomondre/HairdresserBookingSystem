@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.DataAccess;
+using API.Models;
 using Client.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,12 +35,17 @@ namespace API.Persistence.WorkingDays
                 where w.Company.Id == id
                 select new WorkingDay()
                 {
+                    Start = w.Start,
+                    End = w.End,
+                    StartBreak = w.StartBreak,
+                    BreakLengthInMinutes = w.BreakLengthInMinutes,
                     Id = w.Id,
                     Company = w.Company,
                     Appointments = (from a in context.Appointments
                         where a.WorkingDayId == w.Id
                         select new Appointment()
                         {
+                            Start = a.Start,
                             Id = a.Id,
                             Product = (from p in context.Products where a.Product.Id == p.Id select p).FirstOrDefault(),
                             Customer =

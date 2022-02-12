@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using API.Models;
 using Client.Models;
 
 namespace API.Model.WorkingDays

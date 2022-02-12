@@ -35,7 +35,8 @@ else
     protected override async Task OnInitializedAsync()
     {
         var loggedInCompanyUserCompanyAsync = await CacheService.GetLoggedInCompanyUserCompanyAsync();
-        appointments = (await _workingDayService.GetWorkingDayAsync(loggedInCompanyUserCompanyAsync.Id)).Appointments;
+        var workingDayList = await _workingDayService.GetWorkingDayAsync(loggedInCompanyUserCompanyAsync.Id);
+        appointments = workingDayList.Appointments;
     }
 
     public async Task OnSlotSelect(SchedulerSlotSelectEventArgs args)

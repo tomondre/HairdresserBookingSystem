@@ -14,26 +14,23 @@ namespace Client.Models
         public Company Company { get; set; }
         public int BreakLengthInMinutes { get; set; }
 
-        public IList<Appointment> Appointments;
+        private IList<Appointment> _appointments;
 
-        // public IList<Appointment> Appointments
-        // {
-        //     get
-        //     {
-        //         var result = new List<Appointment>(_appointments);
-        //         result.Add(new WorkSchedule()
-        //         {
-        //             Start = Start,
-        //             End = End,
-        //             Text = "Otváracie hodiny"
-        //         });
-        //         return result;
-        //     }
-        //     set
-        //     {
-        //         _appointments = value;
-        //     }
-        // }
+        public IList<Appointment> Appointments
+        {
+            get
+            {
+                var result = new List<Appointment>(_appointments);
+                result.Add(new WorkSchedule()
+                {
+                    Start = Start,
+                    End = End,
+                    Text = "Otváracie hodiny"
+                });
+                return result;
+            }
+            set => _appointments = value;
+        }
 
         public DateTime EndBreak => StartBreak.AddMinutes(BreakLengthInMinutes);
 

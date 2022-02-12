@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using API.Model.WorkingDays;
+using API.Models;
 using Client.Models;
 using Microsoft.AspNetCore.Mvc;
 

@@ -18,7 +18,7 @@ namespace Client.Models
         [Required]
         public Company Company { get; set; }
         public int BreakLengthInMinutes { get; set; }
-        public IEnumerable<Appointment> Appointments { get; set; }
+        public IList<Appointment> Appointments { get; set; }
         
         public WorkingDay()
         {

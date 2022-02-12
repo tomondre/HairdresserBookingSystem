@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using Client.Models;
 
-namespace Client.Models
+namespace API.Models
 {
     public class WorkingDayList
     {
