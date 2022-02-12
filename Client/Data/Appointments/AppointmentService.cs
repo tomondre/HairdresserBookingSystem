@@ -33,5 +33,13 @@ namespace Client.Data.Appointments
             var appointmentList = await Helper.Deserialize<AppointmentList>(httpResponseMessage);
             return appointmentList;
         }
+
+        public async Task<Appointment> DeleteAppointmentAsync(int appointmentId)
+        {
+            var deleteAsync = await client.DeleteAsync($"{Helper.url}/Appointments/{appointmentId}");
+            await Helper.CheckException(deleteAsync);
+            var deserialize = await Helper.Deserialize<Appointment>(deleteAsync);
+            return deserialize;
+        }
     }
 }

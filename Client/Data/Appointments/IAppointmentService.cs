@@ -7,5 +7,6 @@ namespace Client.Data.Appointments
     {
         Task<Appointment> CreateAppointmentAsync(Appointment appointment);
         Task<AppointmentList> GetCompanyAppointmentListAsync(int companyId);
+        Task<Appointment> DeleteAppointmentAsync(int appointmentId);
     }
 }
