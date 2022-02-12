@@ -10,5 +10,6 @@ namespace Client.Data
     {
         Task<ProductList> GetAllCompanyProducts(int id);
         Task<Product> CreateProductAsync(Product product);
+        Task<Product> UpdateProductAsync(Product product);
     }
 }

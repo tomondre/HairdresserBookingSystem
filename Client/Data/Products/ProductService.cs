@@ -41,5 +41,15 @@ namespace Client.Data
             var deserialize = Helper.Deserialize<Product>(readAsStringAsync);
             return deserialize;
         }
+
+        public async Task<Product> UpdateProductAsync(Product product)
+        {
+            var serialize = Helper.Serialize(product);
+            var stringContent = new StringContent(serialize, Encoding.UTF8, "application/json");
+            var httpResponseMessage = await client.PatchAsync($"{Helper.url}/products/{product.Id}", stringContent);
+            await Helper.CheckException(httpResponseMessage);
+            var deserialize = await Helper.Deserialize<Product>(httpResponseMessage);
+            return deserialize;
+        }
     }
 }

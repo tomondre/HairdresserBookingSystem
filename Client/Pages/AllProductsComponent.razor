@@ -3,21 +3,62 @@
 @using Client.Data.Users
 @using Client.Models
 @using global::Shared.Models
+@using Radzen
 @inject ICacheService CacheService
 @inject IProductService ProductService
 
-<RadzenDataGrid IsLoading="@isLoading" TItem="Product" Data="@Products.Products">
+<RadzenDataGrid @ref="grid" IsLoading="@isLoading" TItem="Product" Data="@Products.Products">
     <Columns>
-        <RadzenDataGridColumn Title="Id" TItem="Product" Property="Id"></RadzenDataGridColumn>
-        <RadzenDataGridColumn Title="Meno" TItem="Product" Property="Name"></RadzenDataGridColumn>
-        <RadzenDataGridColumn Title="Popis" TItem="Product" Property="Description"></RadzenDataGridColumn>
-        <RadzenDataGridColumn Title="Cena" TItem="Product" Property="Price"></RadzenDataGridColumn>
-        <RadzenDataGridColumn Title="Dĺžka v minútach" TItem="Product" Property="ProcedureLengthInMinutes"></RadzenDataGridColumn>
+        <RadzenDataGridColumn Title="Id" TItem="Product" Property="Id">
+
+        </RadzenDataGridColumn>
+
+        <RadzenDataGridColumn Title="Meno" TItem="Product" Property="Name">
+
+        </RadzenDataGridColumn>
+
+        <RadzenDataGridColumn Title="Popis" TItem="Product" Property="Description">
+
+        </RadzenDataGridColumn>
+
+        <RadzenDataGridColumn Title="Cena" TItem="Product" Property="Price">
+
+        </RadzenDataGridColumn>
+
+        <RadzenDataGridColumn Title="Dĺžka v minútach" TItem="Product" Property="ProcedureLengthInMinutes">
+
+        </RadzenDataGridColumn>
+
+        <RadzenDataGridColumn TItem="Product" Context="product" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="120px">
+            <Template Context="product">
+                <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Class="m-1" Click="@(args => EditRow(product))" @onclick:stopPropagation="true">
+                </RadzenButton>
+            </Template>
+            <EditTemplate Context="product">
+                <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Primary" Class="m-1" Click="@((args) => SaveRow(product))">
+                </RadzenButton>
+                <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Class="m-1" Click="@((args) => CancelEdit(product))">
+                </RadzenButton>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+
+        <RadzenDataGridColumn TItem="Product" Context="product" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="60px">
+            <Template Context="product">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Small" Class="m-1" Click="@(args => DeleteRow(product))" @onclick:stopPropagation="true">
+                </RadzenButton>
+            </Template>
+            <EditTemplate Context="product">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Small" Class="m-1" Click="@(args => DeleteRow(product))">
+                </RadzenButton>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+
     </Columns>
-
 </RadzenDataGrid>
-
+<em>@errorMessage</em>
 @code {
+    private string errorMessage = "";
+    private RadzenDataGrid<Product> grid;
     private bool isLoading = true;
     private ProductList Products = new ProductList();
 
@@ -33,6 +74,44 @@
             Console.WriteLine(e);
         }
         isLoading = false;
+    }
+
+    private void EditRow(Product product)
+    {
+        grid.EditRow(product);
+    }
+
+    private async Task SaveRow(Product product)
+    {
+        try
+        {
+            await ProductService.UpdateProductAsync(product);
+            await grid.UpdateRow(product);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            grid.CancelEditRow(product);
+            errorMessage = e.Message;
+        }
+    }
+
+    private void CancelEdit(Product product)
+    {
+        grid.CancelEditRow(product);
+    }
+
+    private void DeleteRow(Product product)
+    {
+        try
+        {
+
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            errorMessage = e.Message;
+        }
     }
 
 }
