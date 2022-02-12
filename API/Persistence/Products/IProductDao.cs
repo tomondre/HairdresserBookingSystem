@@ -10,5 +10,6 @@ namespace API.Persistence
         Task<Product> GetProductByIdAsync(int id);
         Task<IList<Product>> GetCompanyProductsAsync(int id);
         Task<IList<Product>> GetPagedCompanyProductsAsync(int id, int size, int page);
+        Task<Product> DeleteProductAsync(int id);
     }
 }

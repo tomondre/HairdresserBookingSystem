@@ -57,5 +57,19 @@ namespace API.Persistence
             var products = Page(firstOrDefaultAsync.Products, page, size);
             return products;
         }
+
+        public async Task<Product> DeleteProductAsync(int id)
+        {
+            await using HairdresserDbContext context = new HairdresserDbContext();
+            var firstOrDefaultAsync = await context.Products.Where(p => p.Id == id).FirstOrDefaultAsync();
+            if (firstOrDefaultAsync == null)
+            {
+                throw new Exception("Product with the given ID doesn't exist");
+            }
+
+            var entityEntry = context.Products.Remove(firstOrDefaultAsync);
+            await context.SaveChangesAsync();
+            return entityEntry.Entity;
+        }
     }
 }

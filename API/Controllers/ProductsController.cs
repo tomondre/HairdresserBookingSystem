@@ -73,6 +73,20 @@ namespace API.Controllers
                 return StatusCode(403, e.Message);
             }
         }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult<Product>> DeleteProductAsync([FromRoute] int id){
+            try
+            {
+                var deleteProductAsync = await model.DeleteProductAsync(id);
+                return Ok(deleteProductAsync);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(403, e.Message);
+            }
+        }
         
     }
 }

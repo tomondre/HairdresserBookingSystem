@@ -33,5 +33,10 @@ namespace API.Model.Products
         {
             return productDao.GetPagedCompanyProductsAsync(id, size, page);
         }
+
+        public Task<Product> DeleteProductAsync(int id)
+        {
+            return productDao.DeleteProductAsync(id);
+        }
     }
 }
