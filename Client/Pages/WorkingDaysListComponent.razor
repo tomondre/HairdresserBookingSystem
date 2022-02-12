@@ -6,26 +6,61 @@
 @inject ICacheService CacheService
 @inject DialogService DialogService
 
-<RadzenDataGrid @ref="Grid" TItem="WorkingDay" IsLoading="isLoading" Data="@WorkingDays">
+<RadzenDataGrid @ref="Grid" TItem="WorkingDay" IsLoading="isLoading" Data="@WorkingDays" RowUpdate="@OnUpdateRow" EditMode="DataGridEditMode.Single">
     <Columns>
-        <RadzenDataGridColumn TItem="WorkingDay" Property="Start" Title="Začiatok"/>
-        <RadzenDataGridColumn TItem="WorkingDay" Property="End" Title="Koniec"/>
-        <RadzenDataGridColumn TItem="WorkingDay" Property="StartBreak" Title="Začiatok Prestávky"/>
-        <RadzenDataGridColumn TItem="WorkingDay" Property="BreakLengthInMinutes" Title="Dĺžka prestávky"/>
+        <RadzenDataGridColumn TItem="WorkingDay" Property="Start" Title="Začiatok">
+            <EditTemplate Context="workingDay">
+                <RadzenDatePicker @bind-Value="workingDay.Start" Style="width:100%"/>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+
+        <RadzenDataGridColumn TItem="WorkingDay" Property="End" Title="Koniec">
+            <EditTemplate Context="workingDay">
+                <RadzenDatePicker @bind-Value="workingDay.End" Style="width:100%"/>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+
+        <RadzenDataGridColumn TItem="WorkingDay" Property="StartBreak" Title="Začiatok Prestávky">
+            <EditTemplate Context="workingDay">
+                <RadzenDatePicker @bind-Value="workingDay.StartBreak" TValue="DateTime" TimeOnly="true" DateFormat="HH:mm" ShowTime="true"/>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+
+        <RadzenDataGridColumn TItem="WorkingDay" Property="BreakLengthInMinutes" Title="Dĺžka prestávky v minútach">
+            <EditTemplate Context="workingDay">
+                <RadzenNumeric @bind-Value="workingDay.BreakLengthInMinutes" Style="width:100%"/>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+
         <RadzenDataGridColumn TItem="WorkingDay" Context="WorkingDay" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="60px">
             <Template Context="workingDay">
                 <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Small" Class="m-1" Click="@(args => DeleteRow(workingDay))" @onclick:stopPropagation="true">
                 </RadzenButton>
             </Template>
-            @* <EditTemplate Context="workingDay"> *@
-            @*     <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Small" Class="m-1" Click="@(args => DeleteRow(workingDay))"> *@
-            @*     </RadzenButton> *@
-            @* </EditTemplate> *@
+            <EditTemplate Context="workingDay">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Small" Class="m-1" Click="@(args => DeleteRow(workingDay))">
+                </RadzenButton>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+
+        <RadzenDataGridColumn TItem="WorkingDay" Context="workingDay" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="120px">
+            <Template Context="workingDay">
+                <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Class="m-1" Click="@(args => EditRow(workingDay))" @onclick:stopPropagation="true">
+                </RadzenButton>
+            </Template>
+            <EditTemplate Context="workingDay">
+                <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Primary" Class="m-1" Click="@((args) => SaveRow(workingDay))">
+                </RadzenButton>
+                <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Class="m-1" Click="@((args) => CancelEdit(workingDay))">
+                </RadzenButton>
+            </EditTemplate>
         </RadzenDataGridColumn>
     </Columns>
 </RadzenDataGrid>
+<em>@errorMessage</em>
 
 @code {
+    private string errorMessage = "";
     private RadzenDataGrid<WorkingDay> Grid;
     private IList<WorkingDay> WorkingDays;
     private Boolean isLoading = true;
@@ -53,6 +88,39 @@
         catch (Exception e)
         {
             Console.WriteLine(e);
+            errorMessage = e.Message;
+        }
+    }
+
+    private void OnUpdateRow(WorkingDay workingDay)
+    {
+        throw new NotImplementedException();
+    }
+
+    private void CancelEdit(WorkingDay value)
+    {
+        Grid.CancelEditRow(value);
+    }
+
+    private void EditRow(WorkingDay workingDay)
+    {
+        Grid.EditRow(workingDay);
+    }
+
+    private void SaveRow(WorkingDay workingDay)
+    {
+        //TODO
+        var sb = workingDay.StartBreak;
+        var s = workingDay.Start;
+        workingDay.StartBreak = new DateTime(s.Year, s.Month, s.Day, sb.Hour, sb.Minute, sb.Second);
+        try
+        {
+            Grid.UpdateRow(workingDay);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            errorMessage = e.Message;
         }
     }
 

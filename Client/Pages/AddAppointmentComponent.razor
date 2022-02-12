@@ -98,7 +98,7 @@
     private ProductList products;
 
     private bool Loading = false;
-    
+
     Appointment model = new();
 
     protected override void OnParametersSet()
@@ -112,7 +112,7 @@
         var cachedUserAsync = CacheService.GetUserAsync();
         var openedCompanyAsync = CacheService.GetOpenedCompanyAsync();
         await Task.WhenAll(allCompanyProducts, cachedUserAsync, openedCompanyAsync);
-        
+
         products = allCompanyProducts.Result;
         model.Customer = (Customer) cachedUserAsync.Result;
         model.Product = products.Products[0];
@@ -123,7 +123,6 @@
         Loading = true;
         try
         {
-            
             AppointmentService.CreateAppointmentAsync(model);
         }
         catch (Exception e)
