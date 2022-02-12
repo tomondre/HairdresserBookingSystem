@@ -12,7 +12,7 @@ namespace Shared.Models
         public string Name { get; set; }
         public bool IsApproved { get; set; }
 
-        public IList<Product> Products { get; set; }
+        public IEnumerable<Product> Products { get; set; }
         
         public Company()
         {

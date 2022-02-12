@@ -27,12 +27,12 @@
         {
             var openedCompanyAsync = await CacheService.GetLoggedInCompanyUserCompanyAsync();
             Products = await ProductService.GetAllCompanyProducts(openedCompanyAsync.Id);
-            isLoading = false;
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
         }
+        isLoading = false;
     }
 
 }

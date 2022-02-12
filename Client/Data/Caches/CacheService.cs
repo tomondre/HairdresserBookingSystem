@@ -48,10 +48,8 @@ namespace Client.Data.Caches
                 await sessionStorage.SetAsync("loggedInCompany", company);
                 return company;
             }
-            else
-            {
-                return protectedBrowserStorageResult.Value;
-            }
+
+            return protectedBrowserStorageResult.Value;
         }
     }
 }

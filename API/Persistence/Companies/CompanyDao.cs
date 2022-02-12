@@ -15,7 +15,7 @@ namespace API.Persistence
         public async Task<Company> GetCompanyByIdAsync(int id)
         {
             await using HairdresserDbContext context = new HairdresserDbContext();
-            var firstOrDefaultAsync = await context.Companies.FirstOrDefaultAsync(c => c.Id == id);
+            var firstOrDefaultAsync = await context.Companies.Include(c => c.Products).FirstOrDefaultAsync(c => c.Id == id);
             if (firstOrDefaultAsync == null)
             {
                 throw new Exception("Company not found");

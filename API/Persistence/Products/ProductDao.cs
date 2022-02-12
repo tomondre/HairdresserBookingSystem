@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using API.DataAccess;
 using API.Models;
@@ -46,7 +47,7 @@ namespace API.Persistence
                 throw new Exception("Company doesnt exist");
             }
 
-            return firstOrDefaultAsync.Products;
+            return firstOrDefaultAsync.Products.ToList();
         }
 
         public async Task<IList<Product>> GetPagedCompanyProductsAsync(int id, int size, int page)
