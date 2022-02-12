@@ -1,0 +1,41 @@
+﻿@using Client.Models
+@using Client.Data.Appointments
+@using Client.Data.Users
+
+@inject IAppointmentService AppointmentService
+@inject ICacheService CacheService
+
+<RadzenDataGrid IsLoading="isLoading" TItem="Appointment" Data="@Appointments.Appointments">
+    <Columns>
+        <RadzenDataGridColumn TItem="Appointment" Property="Start" Title="Začiatok"></RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="Appointment" Property="End" Title="Koniec"></RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="Appointment" Property="Customer.FirstName" Title="Klient meno"/>
+        <RadzenDataGridColumn TItem="Appointment" Property="Customer.LastName" Title="Klient priezvisko"/>
+        <RadzenDataGridColumn TItem="Appointment" Property="Product.Name" Title="Názov produktu"></RadzenDataGridColumn>
+
+
+    </Columns>
+</RadzenDataGrid>
+<em>@errorMessage</em>
+
+@code {
+    private AppointmentList Appointments = new AppointmentList();
+    private bool isLoading = true;
+    private string errorMessage = "";
+    
+    protected async override Task OnInitializedAsync()
+    {
+        try
+        {
+            var loggedInUserCompanyAsync = await CacheService.GetLoggedInUserCompanyAsync();
+            Appointments = await AppointmentService.GetCompanyAppointmentListAsync(loggedInUserCompanyAsync.Id);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            errorMessage = e.Message;
+        }
+        isLoading = false;
+    }
+
+}
