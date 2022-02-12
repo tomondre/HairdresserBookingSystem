@@ -114,7 +114,7 @@
         await Task.WhenAll(allCompanyProducts, cachedUserAsync, openedCompanyAsync);
         
         products = allCompanyProducts.Result;
-        model.Customer = cachedUserAsync.Result;
+        model.Customer = (Customer) cachedUserAsync.Result;
         model.Product = products.Products[0];
     }
 

@@ -6,6 +6,7 @@ namespace Client.Models
 {
     public class Appointment
     {
+        public int Id { get; set; }
         public DateTime Start { get; set; }
 
         public virtual DateTime End
@@ -21,11 +22,11 @@ namespace Client.Models
         }
 
         public Product Product { get; set; }
-        public User Customer { get; set; }
+        public Customer Customer { get; set; }
         
         public Appointment()
         {
-            Customer = new User();
+            Customer = new Customer();
             Start = new DateTime();
             Product = new Product();
         }
