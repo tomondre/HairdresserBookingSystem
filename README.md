@@ -1,4 +1,13 @@
-﻿TODO:
-Create validation in api model classes instead of annotations - more like annoyations
-Check if the working day schedule for the same day is already in db when creating new one
- 
+﻿
+## Simple booking system for booking hairdresser appointments
+
+#### TODO: 
+* Create validations:<br/>  
+  * Client:
+    * When creating working day - dates and times has to be right
+    * When creating working day - the newly created working cant be at the same time as already existing one
+  * API:
+    * In model classes instead of annotations
+
+* Create view for available times
+* Maybe some automatic emails?
