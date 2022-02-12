@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using API.DataAccess;
 using API.Models;
@@ -15,18 +16,21 @@ namespace API.Persistence.Appointments
         public async Task<Appointment> CreateAppointmentAsync(Appointment appointment)
         {
             await using HairdresserDbContext context = new HairdresserDbContext();
-            var customer = await context.Users.OfType<Customer>().FirstOrDefaultAsync(u => u.Id == appointment.Customer.Id);
+            var customer = await context.Users.OfType<Customer>()
+                .FirstOrDefaultAsync(u => u.Id == appointment.Customer.Id);
             if (customer == null)
             {
                 throw new Exception("Assigned user doesn't exist");
             }
+
             appointment.Customer = customer;
-            
+
             var product = await context.Products.FirstOrDefaultAsync(p => p.Id == appointment.Product.Id);
             if (product == null)
             {
                 throw new Exception("Assigned product doesnt exist");
             }
+
             appointment.Product = product;
 
             var workingDay = await context.WorkingDays.FirstOrDefaultAsync(w => w.Id == appointment.WorkingDayId);
@@ -44,17 +48,27 @@ namespace API.Persistence.Appointments
         {
             await using HairdresserDbContext context = new HairdresserDbContext();
 
-            var appointments = context.Appointments.Include("Product").Where(a => a.Product.CompanyId == id).ToList();
+            var appointments =
+                from a in context.Appointments
+                where a.Product.CompanyId == id
+                select new Appointment()
+                {
+                    Id = a.Id,
+                    Start = a.Start,
+                    WorkingDayId = a.WorkingDayId,
+                    Customer = (from c in context.Customers where c.Id == a.Customer.Id select c).FirstOrDefault(),
+                    Product = (from p in context.Products where a.Product.Id == p.Id select p).FirstOrDefault()
+                };
+
             if (!appointments.Any())
             {
                 throw new Exception("Company doesn't contain any appointments or company doesn't exist");
             }
 
-            return new AppointmentList()
+            return new AppointmentList
             {
-                Appointments = appointments
-            };  
-
+                Appointments = await appointments.OrderByDescending(a => a.Start).ToListAsync()
+            };
         }
     }
 }
