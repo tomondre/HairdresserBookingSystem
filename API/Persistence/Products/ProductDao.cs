@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using API.DataAccess;
 using API.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.VisualBasic;
 using Shared.Models;
 
@@ -70,6 +71,24 @@ namespace API.Persistence
             var entityEntry = context.Products.Remove(firstOrDefaultAsync);
             await context.SaveChangesAsync();
             return entityEntry.Entity;
+        }
+
+        public async Task<Product> UpdateProductAsync(int id, Product product)
+        {
+            await using HairdresserDbContext context = new HairdresserDbContext();
+            var firstOrDefaultAsync = await context.Products.Where(p => p.Id == id).FirstOrDefaultAsync();
+            if (firstOrDefaultAsync == null)
+            {
+                throw new Exception("Product with the give ID doesn't exist!");
+            }
+
+            firstOrDefaultAsync.Name = product.Name;
+            firstOrDefaultAsync.Description = product.Description;
+            firstOrDefaultAsync.Price = product.Price;
+            firstOrDefaultAsync.ProcedureLengthInMinutes = product.ProcedureLengthInMinutes;
+
+            await context.SaveChangesAsync();
+            return firstOrDefaultAsync;
         }
     }
 }

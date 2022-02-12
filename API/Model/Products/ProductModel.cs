@@ -38,5 +38,10 @@ namespace API.Model.Products
         {
             return productDao.DeleteProductAsync(id);
         }
+
+        public Task<Product> UpdateProductAsync(int id, Product product)
+        {
+            return productDao.UpdateProductAsync(id, product);
+        }
     }
 }

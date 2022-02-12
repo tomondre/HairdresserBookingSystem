@@ -87,6 +87,22 @@ namespace API.Controllers
                 return StatusCode(403, e.Message);
             }
         }
+
+        [HttpPatch("{id:int}")]
+        public async Task<ActionResult<Product>> UpdateProductAsync([FromRoute] int id, [FromBody] Product product)
+        {
+            try
+            {
+                var updateProductAsync = await model.UpdateProductAsync(id, product);
+                return Ok(updateProductAsync);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(403, e.Message);
+            }
+        }
+        
         
     }
 }
