@@ -39,12 +39,22 @@ namespace Client.Data.WorkingDays
             return workingDay;
         }
 
-        public async Task<WorkingDay> DeleteWorkingDay(int workingDayId)
+        public async Task<WorkingDay> DeleteWorkingDayAsync(int workingDayId)
         {
             var httpResponseMessage = await client.DeleteAsync($"{Helper.url}/WorkingDays/{workingDayId}");
             await Helper.CheckException(httpResponseMessage);
             var workingDay = await Helper.Deserialize<WorkingDay>(httpResponseMessage);
             return workingDay;
+        }
+
+        public async Task<WorkingDay> UpdateWorkingDayAsync(WorkingDay workingDay)
+        {
+            var serializedWorkingDay = Helper.Serialize(workingDay);
+            var stringContent = new StringContent(serializedWorkingDay, Encoding.UTF8, "application/json");
+            var httpResponseMessage = await client.PatchAsync($"{Helper.url}/WorkingDays/{workingDay.Id}", stringContent);
+            await Helper.CheckException(httpResponseMessage);
+            var deserialize = await Helper.Deserialize<WorkingDay>(httpResponseMessage);
+            return deserialize;
         }
     }
 }

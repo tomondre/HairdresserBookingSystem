@@ -6,7 +6,7 @@
 @inject ICacheService CacheService
 @inject DialogService DialogService
 
-<RadzenDataGrid @ref="Grid" TItem="WorkingDay" IsLoading="isLoading" Data="@WorkingDays" RowUpdate="@OnUpdateRow" EditMode="DataGridEditMode.Single">
+<RadzenDataGrid @ref="Grid" TItem="WorkingDay" IsLoading="isLoading" Data="@WorkingDays" EditMode="DataGridEditMode.Single">
     <Columns>
         <RadzenDataGridColumn TItem="WorkingDay" Property="Start" Title="Začiatok">
             <EditTemplate Context="workingDay">
@@ -32,17 +32,6 @@
             </EditTemplate>
         </RadzenDataGridColumn>
 
-        <RadzenDataGridColumn TItem="WorkingDay" Context="WorkingDay" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="60px">
-            <Template Context="workingDay">
-                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Small" Class="m-1" Click="@(args => DeleteRow(workingDay))" @onclick:stopPropagation="true">
-                </RadzenButton>
-            </Template>
-            <EditTemplate Context="workingDay">
-                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Small" Class="m-1" Click="@(args => DeleteRow(workingDay))">
-                </RadzenButton>
-            </EditTemplate>
-        </RadzenDataGridColumn>
-
         <RadzenDataGridColumn TItem="WorkingDay" Context="workingDay" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="120px">
             <Template Context="workingDay">
                 <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Class="m-1" Click="@(args => EditRow(workingDay))" @onclick:stopPropagation="true">
@@ -52,6 +41,17 @@
                 <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Primary" Class="m-1" Click="@((args) => SaveRow(workingDay))">
                 </RadzenButton>
                 <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Class="m-1" Click="@((args) => CancelEdit(workingDay))">
+                </RadzenButton>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+
+        <RadzenDataGridColumn TItem="WorkingDay" Context="WorkingDay" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="60px">
+            <Template Context="workingDay">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Small" Class="m-1" Click="@(args => DeleteRow(workingDay))" @onclick:stopPropagation="true">
+                </RadzenButton>
+            </Template>
+            <EditTemplate Context="workingDay">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Small" Class="m-1" Click="@(args => DeleteRow(workingDay))">
                 </RadzenButton>
             </EditTemplate>
         </RadzenDataGridColumn>
@@ -80,7 +80,7 @@
             var confirm = await DialogService.Confirm($"Naozaj chcete vymazať pracovný deň {workingDay.Start.ToString("ddd, dd MMM yyy")} a všetky jeho objednané časy?");
             if (confirm.HasValue && confirm.Value)
             {
-                await WorkingDayService.DeleteWorkingDay(workingDay.Id);
+                await WorkingDayService.DeleteWorkingDayAsync(workingDay.Id);
             }
             WorkingDays.Remove(workingDay);
             await Grid.Reload();
@@ -92,10 +92,6 @@
         }
     }
 
-    private void OnUpdateRow(WorkingDay workingDay)
-    {
-        throw new NotImplementedException();
-    }
 
     private void CancelEdit(WorkingDay value)
     {
@@ -109,17 +105,18 @@
 
     private void SaveRow(WorkingDay workingDay)
     {
-        //TODO
         var sb = workingDay.StartBreak;
         var s = workingDay.Start;
         workingDay.StartBreak = new DateTime(s.Year, s.Month, s.Day, sb.Hour, sb.Minute, sb.Second);
         try
         {
+            WorkingDayService.UpdateWorkingDayAsync(workingDay);
             Grid.UpdateRow(workingDay);
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
+            Grid.CancelEditRow(workingDay);
             errorMessage = e.Message;
         }
     }

@@ -72,9 +72,28 @@ namespace API.Persistence.WorkingDays
             {
                 throw new Exception("Working day with the given ID doesn't exist!");
             }
+
             var entityEntry = context.WorkingDays.Remove(firstOrDefaultAsync);
             await context.SaveChangesAsync();
             return entityEntry.Entity;
+        }
+
+        public async Task<WorkingDay> UpdateWorkingDayAsync(int workingDayId, WorkingDay workingDay)
+        {
+            await using HairdresserDbContext context = new HairdresserDbContext();
+            var firstOrDefaultAsync = await context.WorkingDays.Where(w => w.Id == workingDayId).FirstOrDefaultAsync();
+            if (firstOrDefaultAsync == null)
+            {
+                throw new Exception("Working day with the given ID doesn't exist!");
+            }
+
+            firstOrDefaultAsync.Start = workingDay.Start;
+            firstOrDefaultAsync.End = workingDay.End;
+            firstOrDefaultAsync.StartBreak = workingDay.StartBreak;
+            firstOrDefaultAsync.BreakLengthInMinutes = workingDay.BreakLengthInMinutes;
+
+            await context.SaveChangesAsync();
+            return firstOrDefaultAsync;
         }
     }
 }

@@ -29,5 +29,10 @@ namespace API.Model.WorkingDays
         {
             return dao.DeleteWorkingDayAsync(id);
         }
+
+        public Task<WorkingDay> UpdateWorkingDayAsync(int workingDayId, WorkingDay workingDay)
+        {
+            return dao.UpdateWorkingDayAsync(workingDayId, workingDay);
+        }
     }
 }

@@ -9,5 +9,6 @@ namespace API.Persistence.WorkingDays
         Task<WorkingDay> CreateWorkingDayAsync(WorkingDay workingDay);
         Task<WorkingDayList> GetAllCompanyWorkingDaysAsync(int id);
         Task<WorkingDay> DeleteWorkingDayAsync(int id);
+        Task<WorkingDay> UpdateWorkingDayAsync(int workingDayId, WorkingDay workingDay);
     }
 }

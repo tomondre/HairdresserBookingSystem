@@ -49,7 +49,7 @@ namespace API.Controllers
             }            
         }
 
-        [HttpGet("/companies/{id:int}/workingdays")]
+        [HttpGet("/companies/{id:int}/WorkingDays")]
         public async Task<ActionResult<WorkingDayList>> GetAllCompanyWorkingDaysAsync([FromRoute] int id)
         {
             try
@@ -63,7 +63,21 @@ namespace API.Controllers
                 return StatusCode(403, e.Message);
             }
         }
-        
+
+        [HttpPatch("{workingDayId:int}")]
+        public async Task<ActionResult<WorkingDay>> UpdateWorkingDayAsync([FromBody] WorkingDay workingDay, [FromRoute] int workingDayId)
+        {
+            try
+            {
+                var updateWorkingDayAsync = await model.UpdateWorkingDayAsync(workingDayId, workingDay);
+                return Ok(updateWorkingDayAsync);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(403, e.Message);
+            }
+        }
 
     }
 }

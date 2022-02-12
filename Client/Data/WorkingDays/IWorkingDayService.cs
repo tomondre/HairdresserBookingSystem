@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using Client.Models;
 
 namespace Client.Data
@@ -7,6 +8,7 @@ namespace Client.Data
     {
         Task<WorkingDayList> GetWorkingDayListAsync(int companyId);
         Task<WorkingDay> CreateWorkingDayAsync(WorkingDay model);
-        Task<WorkingDay> DeleteWorkingDay(int workingDayId);
+        Task<WorkingDay> DeleteWorkingDayAsync(int workingDayId);
+        Task<WorkingDay> UpdateWorkingDayAsync(WorkingDay workingDay);
     }
 }
