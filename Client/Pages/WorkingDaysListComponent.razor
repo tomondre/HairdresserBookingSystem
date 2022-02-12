@@ -81,10 +81,10 @@
             if (confirm.HasValue && confirm.Value)
             {
                 await WorkingDayService.DeleteWorkingDayAsync(workingDay.Id);
+                WorkingDays.Remove(workingDay);
+                await Grid.Reload();
             }
-            WorkingDays.Remove(workingDay);
-            await Grid.Reload();
-        }
+          }
         catch (Exception e)
         {
             Console.WriteLine(e);
