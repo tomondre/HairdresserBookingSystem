@@ -25,5 +25,13 @@ namespace Client.Data.Appointments
             var deserialize = Helper.Deserialize<Appointment>(readAsStringAsync);
             return deserialize;
         }
+
+        public async Task<AppointmentList> GetCompanyAppointmentListAsync(int companyId)
+        {
+            var httpResponseMessage = await client.GetAsync($"{Helper.url}/Companies/{companyId}/Appointments");
+            await Helper.CheckException(httpResponseMessage);
+            var appointmentList = await Helper.Deserialize<AppointmentList>(httpResponseMessage);
+            return appointmentList;
+        }
     }
 }
