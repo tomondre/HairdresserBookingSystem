@@ -2,6 +2,7 @@
 ## Simple booking system for booking hairdresser appointments
 
 #### TODO: 
+* Implement edit functionality in product table
 * Create validations:<br/>  
   * Client:
     * When creating working day - dates and times has to be right
