@@ -101,11 +101,13 @@
         grid.CancelEditRow(product);
     }
 
-    private void DeleteRow(Product product)
+    private async Task DeleteRow(Product product)
     {
         try
         {
-
+            await ProductService.DeleteProductAsync(product.Id);
+            Products.Products.Remove(product);
+            await grid.Reload();
         }
         catch (Exception e)
         {

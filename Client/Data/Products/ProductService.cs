@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Threading.Tasks;
 using API.Models;
@@ -47,6 +48,14 @@ namespace Client.Data
             var serialize = Helper.Serialize(product);
             var stringContent = new StringContent(serialize, Encoding.UTF8, "application/json");
             var httpResponseMessage = await client.PatchAsync($"{Helper.url}/products/{product.Id}", stringContent);
+            await Helper.CheckException(httpResponseMessage);
+            var deserialize = await Helper.Deserialize<Product>(httpResponseMessage);
+            return deserialize;
+        }
+
+        public async Task<Product> DeleteProductAsync(int productId)
+        {
+            var httpResponseMessage = await client.DeleteAsync($"{Helper.url}/products/{productId}");
             await Helper.CheckException(httpResponseMessage);
             var deserialize = await Helper.Deserialize<Product>(httpResponseMessage);
             return deserialize;
