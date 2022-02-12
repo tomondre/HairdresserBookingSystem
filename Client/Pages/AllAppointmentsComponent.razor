@@ -1,28 +1,40 @@
 ﻿@using Client.Models
 @using Client.Data.Appointments
 @using Client.Data.Users
+@using Radzen
 
 @inject IAppointmentService AppointmentService
 @inject ICacheService CacheService
+@inject DialogService DialogService
 
-<RadzenDataGrid IsLoading="isLoading" TItem="Appointment" Data="@Appointments.Appointments">
+<RadzenDataGrid @ref="grid"  IsLoading="isLoading" TItem="Appointment" Data="@Appointments.Appointments">
     <Columns>
         <RadzenDataGridColumn TItem="Appointment" Property="Start" Title="Začiatok"></RadzenDataGridColumn>
+        
         <RadzenDataGridColumn TItem="Appointment" Property="End" Title="Koniec"></RadzenDataGridColumn>
+        
         <RadzenDataGridColumn TItem="Appointment" Property="Customer.FirstName" Title="Klient meno"/>
+        
         <RadzenDataGridColumn TItem="Appointment" Property="Customer.LastName" Title="Klient priezvisko"/>
+        
         <RadzenDataGridColumn TItem="Appointment" Property="Product.Name" Title="Názov produktu"></RadzenDataGridColumn>
-
-
+        
+        <RadzenDataGridColumn TItem="Appointment" Context="Appointment" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="60px">
+            <Template Context="appointment">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Small" Class="m-1" Click="@(args => DeleteRow(appointment))" @onclick:stopPropagation="true">
+                </RadzenButton>
+            </Template>
+        </RadzenDataGridColumn>
     </Columns>
 </RadzenDataGrid>
 <em>@errorMessage</em>
 
 @code {
+    private RadzenDataGrid<Appointment> grid;
     private AppointmentList Appointments = new AppointmentList();
     private bool isLoading = true;
     private string errorMessage = "";
-    
+
     protected async override Task OnInitializedAsync()
     {
         try
@@ -36,6 +48,26 @@
             errorMessage = e.Message;
         }
         isLoading = false;
+    }
+
+    private async Task DeleteRow(Appointment appointment)
+    {
+        try
+        {
+            var confirm = await DialogService.Confirm($"Naozaj chcete vymazať čas s {appointment.Customer.FirstName} {appointment.Customer.LastName}?");
+            if (confirm.HasValue && confirm.Value)
+            {
+                await AppointmentService.DeleteAppointmentAsync(appointment.Id);
+                Appointments.Appointments.Remove(appointment);
+                await grid.Reload();
+                StateHasChanged();
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            errorMessage = e.Message;
+        }
     }
 
 }
