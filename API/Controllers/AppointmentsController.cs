@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using API.Model.Appointments;
 using Client.Models;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Models;
 
 namespace API.Controllers
 {
@@ -62,5 +63,19 @@ namespace API.Controllers
             }
         }
 
+        [HttpGet("/Companies/{id:int}/AppointmentInfos")]
+        public async Task<ActionResult<AppointmentInfoList>> GetCompanyAppointmentInfosAsync([FromRoute] int id)
+        {
+            try
+            {
+                var appointmentInfos = await model.GetCompanyAppointmentInfosAsync(id);
+                return Ok(appointmentInfos);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return StatusCode(403, e.Message);
+            }
+        }
     }
 }
