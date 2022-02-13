@@ -6,27 +6,35 @@
 @using Radzen
 @inject ICacheService CacheService
 @inject IProductService ProductService
+@inject DialogService DialogService
 
 <RadzenDataGrid @ref="grid" IsLoading="@isLoading" TItem="Product" Data="@Products.Products">
     <Columns>
         <RadzenDataGridColumn Title="Id" TItem="Product" Property="Id">
-
         </RadzenDataGridColumn>
 
         <RadzenDataGridColumn Title="Meno" TItem="Product" Property="Name">
-
+            <EditTemplate Context="product">
+                <RadzenTextArea @bind-Value="product.Name" Style="width:100%"/>
+            </EditTemplate>
         </RadzenDataGridColumn>
 
         <RadzenDataGridColumn Title="Popis" TItem="Product" Property="Description">
-
+            <EditTemplate Context="product">
+                <RadzenTextArea @bind-Value="product.Description" Style="width:100%"/>
+            </EditTemplate>
         </RadzenDataGridColumn>
 
         <RadzenDataGridColumn Title="Cena" TItem="Product" Property="Price">
-
+            <EditTemplate Context="product">
+                <RadzenNumeric @bind-Value="product.Price" Style="width:100%"/>
+            </EditTemplate>
         </RadzenDataGridColumn>
 
         <RadzenDataGridColumn Title="Dĺžka v minútach" TItem="Product" Property="ProcedureLengthInMinutes">
-
+            <EditTemplate Context="product">
+                <RadzenNumeric @bind-Value="product.ProcedureLengthInMinutes" Style="width:100%"/>
+            </EditTemplate>
         </RadzenDataGridColumn>
 
         <RadzenDataGridColumn TItem="Product" Context="product" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="120px">
@@ -56,6 +64,7 @@
     </Columns>
 </RadzenDataGrid>
 <em>@errorMessage</em>
+
 @code {
     private string errorMessage = "";
     private RadzenDataGrid<Product> grid;
@@ -105,9 +114,13 @@
     {
         try
         {
-            await ProductService.DeleteProductAsync(product.Id);
-            Products.Products.Remove(product);
-            await grid.Reload();
+            var confirm = await DialogService.Confirm($"Naozaj chcete vymazať produkt {product.Name}?");
+            if (confirm.HasValue && confirm.Value)
+            {
+                await ProductService.DeleteProductAsync(product.Id);
+                Products.Products.Remove(product);
+                await grid.Reload();
+            }
         }
         catch (Exception e)
         {
