@@ -50,7 +50,7 @@ namespace API.Persistence.WorkingDays
                             Product = (from p in context.Products where a.Product.Id == p.Id select p).FirstOrDefault(),
                             Customer =
                                 (from c in context.Customers where a.Customer.Id == c.Id select c).FirstOrDefault()
-                        }).ToList()
+                        }).OrderByDescending(a => a.Start).ToList()
                 };
 
             if (!days.Any())
