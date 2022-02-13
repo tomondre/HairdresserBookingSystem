@@ -81,7 +81,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        model.Start = DateTime.Now.AddDays(1);
+        model.Start = DateTime.Today.AddDays(1).AddHours(9);
         model.End = model.Start.AddHours(8);
         BreakStart = model.Start.AddHours(4);
     }
